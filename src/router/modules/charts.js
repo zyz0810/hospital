@@ -25,12 +25,6 @@ const chartsRouter = {
       meta: { title: '运营报表', noCache: true }
     },
     {
-      path: 'mix-chart',
-      component: () => import('@/views/charts/mix-chart'),
-      name: '客户报表',
-      meta: { title: '客户报表', noCache: true }
-    },
-    {
       path: 'mix-chart2',
       component: () => import('@/views/charts/mix-chart'),
       name: '员工绩效',
