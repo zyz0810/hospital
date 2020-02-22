@@ -130,7 +130,6 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
 
-
   // {
   //   path: '/icon',
   //   component: Layout,
@@ -144,26 +143,99 @@ export const asyncRoutes = [
   //   ]
   // },
   {
+    path: '/error',
+    component: Layout,
+    redirect: '/zip/download',
+    alwaysShow: true,
+    name: '用户管理',
+    meta: { title: '用户管理', icon: 'zip' },
+    children: [
+
+      {
+        path: 'tab',
+        component: () => import('@/views/zip/index'),
+        name: '咨询师',
+        meta: { title: '咨询师' }
+      },
+      {
+        path: 'download',
+        component: () => import('@/views/zip/index'),
+        name: '医生',
+        meta: { title: '医生' }
+      },
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: '助理',
+        meta: { title: '助理' }
+      },
+      {
+        path: 'download',
+        component: () => import('@/views/zip/index'),
+        name: '回访人员',
+        meta: { title: '回访人员' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/example/edit'),
+        name: '医生详情',
+        meta: { title: '医生详情', noCache: true, activeMenu: '/example/list' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/hospital',
+    component: Layout,
+    redirect: '/hospital/list',
+    name: '医院管理',
+    meta: {
+      title: '医院管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/example/create'),
+        name: '添加医院详情',
+        meta: { title: '添加医院详情' }
+      },
+      {
+        path: 'view/:id(\\d+)',
+        component: () => import('@/views/hospital/view'),
+        name: '医院详情',
+        meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/example/list'),
+        name: '医院列表',
+        meta: { title: '医院列表' }
+      }
+    ]
+  },
+  {
     path: '/excel',
     component: Layout,
     redirect: '/excel/export-excel',
-    name: '数据记录',
+    name: '数据录入',
     meta: {
-      title: '数据记录',
+      title: '数据录入',
       icon: 'excel'
     },
     children: [
       {
         path: 'export-excel',
         component: () => import('@/views/excel/export-excel'),
-        name: '病人基本信息',
-        meta: { title: '病人基本信息' }
+        name: '病人',
+        meta: { title: '病人' }
       },
       {
         path: 'export-selected-excel',
         component: () => import('@/views/excel/select-excel'),
-        name: '咨询信息',
-        meta: { title: '咨询信息' }
+        name: '咨询',
+        meta: { title: '咨询' }
       },
       {
         path: 'custorm/:id(\\d+)',
@@ -175,38 +247,14 @@ export const asyncRoutes = [
       {
         path: 'export-merge-header',
         component: () => import('@/views/excel/merge-header'),
-        name: '门诊信息',
-        meta: { title: '门诊信息' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: '治疗信息',
-        meta: { title: '治疗信息' }
-      },
-      {
-        path: 'guide',
-        component: () => import('@/views/excel/upload-excel'),
-        name: '住院信息',
-        meta: { title: '住院信息' }
+        name: '门诊',
+        meta: { title: '门诊' }
       },
       {
         path: 'icons',
         component: () => import('@/views/excel/upload-excel'),
-        name: '病人回访信息',
-        meta: { title: '病人回访信息' }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/excel/upload-excel'),
-        name: '手术信息',
-        meta: { title: '手术信息' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: '病人列表',
-        meta: { title: '病人列表' }
+        name: '回访',
+        meta: { title: '回访' }
       }
     ]
   },
@@ -245,84 +293,7 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/error',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    name: '人员管理',
-    meta: { title: '人员管理', icon: 'zip' },
-    children: [
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: '医生列表',
-        meta: { title: '医生列表' }
-      },
-      {
-        path: 'tab',
-        component: () => import('@/views/zip/index'),
-        name: '咨询师列表',
-        meta: { title: '咨询师列表' }
-      },
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
-        name: '客户报表',
-        meta: { title: '客户报表' }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: '医生助理信息',
-        meta: { title: '医生助理信息' }
-      },
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: '回访人员信息',
-        meta: { title: '回访人员信息' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: '医生详情',
-        meta: { title: '医生详情', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: '医院管理',
-    meta: {
-      title: '医院管理',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: '添加医院详情',
-        meta: { title: '添加医院详情', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: '医院详情',
-        meta: { title: '医院详情', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: '医院列表',
-        meta: { title: '医院列表', icon: 'list' }
-      }
-    ]
-  },
+
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
 

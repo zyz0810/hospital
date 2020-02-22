@@ -1,112 +1,121 @@
 <template>
   <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="姓名：">
+        <el-input v-model="formInline.user" placeholder="姓名" />
+      </el-form-item>
+      <el-form-item>
+        <el-button :loading="downloadLoading" type="primary" icon="el-icon-search" @click="handleDownload">
+          查找
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
+        新增
+      </el-button>
+    </div>
+    <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+      <el-table-column label="医院名称" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="180px" align="center" label="Date">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="120px" align="center" label="Author">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Status" width="110">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="300px" label="Title">
-        <template slot-scope="{row}">
-          <router-link :to="'/example/edit/'+row.id" class="link-type">
-            <span>{{ row.title }}</span>
+          <router-link :to="'/hospital/view/'+scope.row.id" class="el-link el-link--primary is-underline">
+            {{ scope.row.author }}
           </router-link>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" label="Actions" width="120">
+      <el-table-column label="地址" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/example/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
-            </el-button>
-          </router-link>
+          {{ scope.row.pageviews }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="scope">
+          <el-button :loading="downloadLoading" type="primary" icon="el-icon-edit" @click="handleEdit">
+            编辑
+          </el-button>
+          <el-button :loading="downloadLoading" type="danger" icon="el-icon-delete" @click="handleDel">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="添加医院" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="医院名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" placeholder="请输入医院名称" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="地址" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" placeholder="请输入地址" autocomplete="off" />
+        </el-form-item>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { fetchList } from '@/api/article'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'ArticleList',
-  components: { Pagination },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
+  name: 'ExportZip',
   data() {
     return {
       list: null,
-      total: 0,
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20
-      }
+      downloadLoading: false,
+      filename: '',
+      formInline: {
+        user: ''
+      },
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
     }
   },
   created() {
-    this.getList()
+    this.fetchData()
   },
   methods: {
-    getList() {
+    async fetchData() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
+      const { data } = await fetchList()
+      this.list = data.items
+      this.listLoading = false
+    },
+    handleDownload() {
+      // this.downloadLoading = true
+      // import('@/vendor/Export2Zip').then(zip => {
+      //   const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
+      //   const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+      //   const list = this.list
+      //   const data = this.formatJson(filterVal, list)
+      //   zip.export_txt_to_zip(tHeader, data, this.filename, this.filename)
+      //   this.downloadLoading = false
+      // })
+    },
+    handleEdit() {
+
+    },
+    handleDel() {
+
+    },
+    handleAdd() {},
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     }
   }
 }
 </script>
-
-<style scoped>
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
-</style>

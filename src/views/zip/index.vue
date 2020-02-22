@@ -1,37 +1,57 @@
 <template>
   <div class="app-container">
-    <el-input v-model="filename" placeholder="Please enter the file name (default file)" style="width:300px;" prefix-icon="el-icon-document" />
-    <el-button :loading="downloadLoading" style="margin-bottom:20px;" type="primary" icon="el-icon-document" @click="handleDownload">
-      Export Zip
-    </el-button>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="姓名：">
+        <el-input v-model="formInline.user" placeholder="姓名" />
+      </el-form-item>
+      <el-form-item>
+        <el-button :loading="downloadLoading" type="primary" icon="el-icon-search" @click="handleDownload">
+          查找
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
+        新增
+      </el-button>
+    </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column label="姓名" align="center">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row.author }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="95" align="center">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
+      <el-table-column label="联系电话" align="center">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Date" width="220">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
+      <el-table-column align="center" label="操作">
+
+          <el-button :loading="downloadLoading" type="primary" icon="el-icon-edit" @click="handleEdit">
+            编辑
+          </el-button>
+          <el-button :loading="downloadLoading" type="danger" icon="el-icon-delete" @click="handleDel">
+            删除
+          </el-button>
+
       </el-table-column>
     </el-table>
+    <el-dialog title="添加咨询师" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" placeholder="请输入联系电话" autocomplete="off" />
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -45,7 +65,22 @@ export default {
       list: null,
       listLoading: true,
       downloadLoading: false,
-      filename: ''
+      filename: '',
+      formInline: {
+        user: ''
+      },
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
     }
   },
   created() {
@@ -59,16 +94,23 @@ export default {
       this.listLoading = false
     },
     handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Zip').then(zip => {
-        const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-        const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
-        const list = this.list
-        const data = this.formatJson(filterVal, list)
-        zip.export_txt_to_zip(tHeader, data, this.filename, this.filename)
-        this.downloadLoading = false
-      })
+      // this.downloadLoading = true
+      // import('@/vendor/Export2Zip').then(zip => {
+      //   const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
+      //   const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+      //   const list = this.list
+      //   const data = this.formatJson(filterVal, list)
+      //   zip.export_txt_to_zip(tHeader, data, this.filename, this.filename)
+      //   this.downloadLoading = false
+      // })
     },
+    handleEdit() {
+
+    },
+    handleDel() {
+
+    },
+    handleAdd() {},
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]))
     }
