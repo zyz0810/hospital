@@ -143,35 +143,35 @@ export const asyncRoutes = [
   //   ]
   // },
   {
-    path: '/error',
+    path: '/user',
     component: Layout,
-    redirect: '/zip/download',
+    redirect: '/user/counselor',
     alwaysShow: true,
     name: '用户管理',
-    meta: { title: '用户管理', icon: 'zip' },
+    meta: { title: '用户管理', icon: 'user' },
     children: [
 
       {
-        path: 'tab',
-        component: () => import('@/views/zip/index'),
+        path: 'counselor',
+        component: () => import('@/views/user/index'),
         name: '咨询师',
         meta: { title: '咨询师' }
       },
       {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
+        path: 'doctor',
+        component: () => import('@/views/user/doctor'),
         name: '医生',
         meta: { title: '医生' }
       },
       {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
+        path: 'assistant',
+        component: () => import('@/views/user/assistant'),
         name: '助理',
         meta: { title: '助理' }
       },
       {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
+        path: 'return',
+        component: () => import('@/views/user/return'),
         name: '回访人员',
         meta: { title: '回访人员' }
       },
@@ -209,16 +209,16 @@ export const asyncRoutes = [
       },
       {
         path: 'list',
-        component: () => import('@/views/example/list'),
+        component: () => import('@/views/hospital/list'),
         name: '医院列表',
         meta: { title: '医院列表' }
       }
     ]
   },
   {
-    path: '/excel',
+    path: '/data',
     component: Layout,
-    redirect: '/excel/export-excel',
+    redirect: '/data/patient',
     name: '数据录入',
     meta: {
       title: '数据录入',
@@ -226,14 +226,14 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
+        path: 'patient',
+        component: () => import('@/views/data/patient'),
         name: '病人',
         meta: { title: '病人' }
       },
       {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
+        path: 'consult',
+        component: () => import('@/views/data/consult'),
         name: '咨询',
         meta: { title: '咨询' }
       },
@@ -245,14 +245,14 @@ export const asyncRoutes = [
         hidden: true
       },
       {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
+        path: 'outpatient',
+        component: () => import('@/views/data/outpatient'),
         name: '门诊',
         meta: { title: '门诊' }
       },
       {
-        path: 'icons',
-        component: () => import('@/views/excel/upload-excel'),
+        path: 'return',
+        component: () => import('@/views/data/return'),
         name: '回访',
         meta: { title: '回访' }
       }
@@ -260,34 +260,34 @@ export const asyncRoutes = [
   },
   chartsRouter,
   // {
-  //   path: '/zip',
+  //   path: '/user',
   //   component: Layout,
-  //   redirect: '/zip/download',
+  //   redirect: '/user/download',
   //   alwaysShow: true,
   //   name: '报表展示',
-  //   meta: { title: '报表展示', icon: 'zip' },
+  //   meta: { title: '报表展示', icon: 'user' },
   //   children: [
   //     {
   //       path: 'download',
-  //       component: () => import('@/views/zip/index'),
+  //       component: () => import('@/views/user/index'),
   //       name: '营收报表',
   //       meta: { title: '营收报表' }
   //     },
   //     {
   //       path: 'download',
-  //       component: () => import('@/views/zip/index'),
+  //       component: () => import('@/views/user/index'),
   //       name: '运营报表',
   //       meta: { title: '运营报表' }
   //     },
   //     {
   //       path: 'download',
-  //       component: () => import('@/views/zip/index'),
+  //       component: () => import('@/views/user/index'),
   //       name: '客户报表',
   //       meta: { title: '客户报表' }
   //     },
   //     {
   //       path: 'download',
-  //       component: () => import('@/views/zip/index'),
+  //       component: () => import('@/views/user/index'),
   //       name: '员工绩效',
   //       meta: { title: '员工绩效' }
   //     }
@@ -295,51 +295,51 @@ export const asyncRoutes = [
   // },
 
   /** when your routing map is too long, you can split it into small modules **/
-  componentsRouter,
-
-  nestedRouter,
-  // tableRouter,
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: 'Permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page Permission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'Directive Permission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role Permission',
-          roles: ['admin']
-        }
-      }
-    ]
-  },
+  // componentsRouter,
+  //
+  // nestedRouter,
+  tableRouter,
+  // {
+  //   path: '/permission',
+  //   component: Layout,
+  //   redirect: '/permission/page',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'Permission',
+  //   meta: {
+  //     title: 'Permission',
+  //     icon: 'lock',
+  //     roles: ['admin', 'editor'] // you can set roles in root nav
+  //   },
+  //   children: [
+  //     {
+  //       path: 'page',
+  //       component: () => import('@/views/permission/page'),
+  //       name: 'PagePermission',
+  //       meta: {
+  //         title: 'Page Permission',
+  //         roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     },
+  //     {
+  //       path: 'directive',
+  //       component: () => import('@/views/permission/directive'),
+  //       name: 'DirectivePermission',
+  //       meta: {
+  //         title: 'Directive Permission'
+  //         // if do not set roles, means: this page does not require permission
+  //       }
+  //     },
+  //     {
+  //       path: 'role',
+  //       component: () => import('@/views/permission/role'),
+  //       name: 'RolePermission',
+  //       meta: {
+  //         title: 'Role Permission',
+  //         roles: ['admin']
+  //       }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/tab',

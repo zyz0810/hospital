@@ -14,7 +14,7 @@ const chartsRouter = {
   children: [
     {
       path: 'keyboard',
-      component: () => import('@/views/charts/keyboard'),
+      component: () => import('@/views/charts/revenue'),
       name: '营收报表',
       meta: { title: '营收报表', noCache: true }
     },

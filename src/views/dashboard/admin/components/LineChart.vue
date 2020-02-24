@@ -95,7 +95,7 @@ export default {
         series: [{
           name: 'expected', itemStyle: {
             normal: {
-              color: '#FF005A',
+              color: 'red',
               lineStyle: {
                 color: '#FF005A',
                 width: 2

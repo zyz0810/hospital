@@ -4,27 +4,48 @@
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
+    <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
+      <!--<line-chart :chart-data="lineChartData" />-->
+    <!--</el-row>-->
 
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+    <div style="font-size: 20px;margin-bottom: 15px;">今日营收报表</div>
+    <el-row style="margin-bottom:32px;" :gutter="32">
+
+      <el-col :xs="24" :sm="24" :lg="12" class="card-panel-col">
         <div class="chart-wrapper">
-          <raddar-chart />
+          <BarChartThree />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12" class="card-panel-col">
         <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
+          <PieCharTwo />
         </div>
       </el-col>
     </el-row>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <BarChartThree />
+    </el-row>
+    <div style="font-size: 20px;margin-bottom: 15px;">今日运营报表</div>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <BarChartTwo />
+    </el-row>
+    <!--<el-row :gutter="32">-->
+      <!--<el-col :xs="24" :sm="24" :lg="8">-->
+        <!--<div class="chart-wrapper">-->
+          <!--<raddar-chart />-->
+        <!--</div>-->
+      <!--</el-col>-->
+      <!--<el-col :xs="24" :sm="24" :lg="8">-->
+        <!--<div class="chart-wrapper">-->
+          <!--<pie-chart />-->
+        <!--</div>-->
+      <!--</el-col>-->
+      <!--<el-col :xs="24" :sm="24" :lg="8">-->
+        <!--<div class="chart-wrapper">-->
+          <!--<bar-chart />-->
+        <!--</div>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
 
     <!--    <el-row :gutter="8">-->
     <!--      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">-->
@@ -46,7 +67,10 @@ import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
+import PieCharTwo from './components/PieChartTwo'
 import BarChart from './components/BarChart'
+import BarChartTwo from './components/BarChartTwo'
+import BarChartThree from './components/BarChartThree'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
@@ -78,7 +102,10 @@ export default {
     LineChart,
     RaddarChart,
     PieChart,
+    PieCharTwo,
     BarChart,
+    BarChartTwo,
+    BarChartThree,
     TransactionTable,
     TodoList,
     BoxCard

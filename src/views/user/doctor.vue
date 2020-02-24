@@ -16,36 +16,50 @@
       </el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column label="医院名称" align="center">
+      <el-table-column label="姓名" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/hospital/view/'+scope.row.id" class="el-link el-link--primary is-underline">
-            {{ scope.row.author }}
-          </router-link>
+          {{ scope.row.author }}
         </template>
       </el-table-column>
-      <el-table-column label="地址" align="center">
+      <el-table-column label="所在医院" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.author }}
+        </template>
+      </el-table-column>
+      <el-table-column label="职位" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.author }}
+        </template>
+      </el-table-column>
+      <el-table-column label="联系电话" align="center">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
+
           <el-button :loading="downloadLoading" type="primary" icon="el-icon-edit" @click="handleEdit">
             编辑
           </el-button>
           <el-button :loading="downloadLoading" type="danger" icon="el-icon-delete" @click="handleDel">
             删除
           </el-button>
-        </template>
+
       </el-table-column>
     </el-table>
-    <el-dialog title="添加医院" :visible.sync="dialogFormVisible">
+    <el-dialog title="添加咨询师" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="医院名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" placeholder="请输入医院名称" autocomplete="off" />
+        <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="地址" :label-width="formLabelWidth">
-          <el-input v-model="form.phone" placeholder="请输入地址" autocomplete="off" />
+        <el-form-item label="医院" :label-width="formLabelWidth">
+          <el-input v-model="form.hospital" placeholder="请输入姓名" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="科室" :label-width="formLabelWidth">
+          <el-input v-model="form.department" placeholder="请输入姓名" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" placeholder="请输入联系电话" autocomplete="off" />
         </el-form-item>
 
       </el-form>
@@ -74,13 +88,9 @@ export default {
       dialogFormVisible: false,
       form: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        phone:'',
+        department: '',
+        hospital:''
       },
       formLabelWidth: '120px'
     }
@@ -90,6 +100,7 @@ export default {
   },
   methods: {
     async fetchData() {
+      console.log('bhjhh')
       this.listLoading = true
       const { data } = await fetchList()
       this.list = data.items
@@ -101,8 +112,28 @@ export default {
     handleEdit() {
 
     },
-    handleDel() {
+    //删除
+    handleDel: function (index, row) {
+      this.$confirm('确定删除此条记录吗?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        console.log('dianji')
+        this.listLoading = true;
+        //NProgress.start();
+        // let para = { id: row.id };
+        // removeUser(para).then((res) => {
+        //   this.listLoading = false;
+        //   //NProgress.done();
+        //   this.$message({
+        //     message: '删除成功',
+        //     type: 'success'
+        //   });
+        console.log('dianji')
+          this.fetchData();
+        // });
+      }).catch(() => {
 
+      });
     },
     handleAdd() {},
     formatJson(filterVal, jsonData) {

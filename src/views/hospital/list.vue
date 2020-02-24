@@ -1,49 +1,42 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="姓名：">
-        <el-input v-model="formInline.user" placeholder="姓名" />
-      </el-form-item>
-      <el-form-item>
-        <el-button :loading="downloadLoading" type="primary" icon="el-icon-search" @click="handleDownload">
-          查找
-        </el-button>
-      </el-form-item>
-    </el-form>
+
     <div>
       <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
         新增
       </el-button>
     </div>
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column label="姓名" align="center">
+      <el-table-column label="医院名称" align="center">
         <template slot-scope="scope">
-          {{ scope.row.author }}
+          <router-link :to="'/hospital/view/'+scope.row.id" class="el-link el-link--primary is-underline">
+            {{ scope.row.author }}
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="联系电话" align="center">
+      <el-table-column label="地址" align="center">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
-
+        <template slot-scope="scope">
           <el-button :loading="downloadLoading" type="primary" icon="el-icon-edit" @click="handleEdit">
             编辑
           </el-button>
           <el-button :loading="downloadLoading" type="danger" icon="el-icon-delete" @click="handleDel">
             删除
           </el-button>
-
+        </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="添加咨询师" :visible.sync="dialogFormVisible">
+    <el-dialog title="添加医院" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="姓名" :label-width="formLabelWidth">
-          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off" />
+        <el-form-item label="医院名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" placeholder="请输入医院名称" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.phone" placeholder="请输入联系电话" autocomplete="off" />
+        <el-form-item label="地址" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" placeholder="请输入地址" autocomplete="off" />
         </el-form-item>
 
       </el-form>
@@ -94,15 +87,7 @@ export default {
       this.listLoading = false
     },
     handleDownload() {
-      // this.downloadLoading = true
-      // import('@/vendor/Export2Zip').then(zip => {
-      //   const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-      //   const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
-      //   const list = this.list
-      //   const data = this.formatJson(filterVal, list)
-      //   zip.export_txt_to_zip(tHeader, data, this.filename, this.filename)
-      //   this.downloadLoading = false
-      // })
+
     },
     handleEdit() {
 
