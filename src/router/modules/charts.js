@@ -13,20 +13,20 @@ const chartsRouter = {
   },
   children: [
     {
-      path: 'keyboard',
+      path: 'revenue',
       component: () => import('@/views/charts/revenue'),
       name: '营收报表',
       meta: { title: '营收报表', noCache: true }
     },
     {
-      path: 'line',
-      component: () => import('@/views/charts/line'),
+      path: 'operate',
+      component: () => import('@/views/charts/operate'),
       name: '运营报表',
       meta: { title: '运营报表', noCache: true }
     },
     {
-      path: 'mix-chart2',
-      component: () => import('@/views/charts/mix-chart'),
+      path: 'performance',
+      component: () => import('@/views/charts/performance'),
       name: '员工绩效',
       meta: { title: '员工绩效', noCache: true }
     }

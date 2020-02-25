@@ -84,6 +84,16 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    addDate() {
+      nowDate = new Date();
+      let date = {
+        year: nowDate.getFullYear(),
+        month: nowDate.getMonth() + 1,
+        date: nowDate.getDate(),
+      }
+      console.log(date);
+      let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
     }
   }
 }

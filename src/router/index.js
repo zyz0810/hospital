@@ -195,10 +195,16 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: '添加医院详情',
-        meta: { title: '添加医院详情' }
+        path: 'list',
+        component: () => import('@/views/hospital/list'),
+        name: '医院',
+        meta: { title: '医院列表' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/hospital/list'),
+        name: '医院列表',
+        meta: { title: '医院列表' }
       },
       {
         path: 'view/:id(\\d+)',
@@ -206,12 +212,6 @@ export const asyncRoutes = [
         name: '医院详情',
         meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
         hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/hospital/list'),
-        name: '医院列表',
-        meta: { title: '医院列表' }
       }
     ]
   },

@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column label="客户" width="110" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/excel/custorm/'+scope.row.id" class="el-link el-link--primary is-underline">
+          <router-link :to="'/data/custorm/'+scope.row.id" class="el-link el-link--primary is-underline">
             {{ scope.row.author }}
           </router-link>
 <!--          <el-link href="'/excel/custorm/'+scope.row.id" type="primary">主要链接</el-link>-->
