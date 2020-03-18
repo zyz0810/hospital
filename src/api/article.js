@@ -8,6 +8,23 @@ export function fetchList(query) {
   })
 }
 
+export function aa() {
+  return request({
+    // url: '/vue-element-admin/user/login',
+    url: '/store/kuaixun/list.jhtml',
+    method: 'get',
+  })
+}
+
+
+export function bb() {
+  return request({
+    // url: '/vue-element-admin/user/login',
+    url: '/api/hospitals',
+    method: 'get',
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

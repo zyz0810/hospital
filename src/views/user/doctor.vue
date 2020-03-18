@@ -1,144 +1,245 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="姓名：">
-        <el-input v-model="formInline.user" placeholder="姓名" />
+    <div class="filter-container">
+    <el-form :inline="true" :model="listQuery" class="search_form">
+      <el-form-item label="所在医院：">
+        <el-select v-model="listQuery.hospital_name" class="filter-item" placeholder="请选择医院" @change="getHospital('filter',$event)">
+          <el-option v-for="item in hospitalOption" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="downloadLoading" type="primary" icon="el-icon-search" @click="handleDownload">
-          查找
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          搜索
         </el-button>
       </el-form-item>
     </el-form>
-    <div>
-      <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
-        新增
-      </el-button>
+    <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
+
     </div>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+    <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="姓名" align="center">
         <template slot-scope="scope">
-          {{ scope.row.author }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="所在医院" align="center">
         <template slot-scope="scope">
-          {{ scope.row.author }}
+          {{ scope.row.hospital_name }}
         </template>
       </el-table-column>
       <el-table-column label="职位" align="center">
         <template slot-scope="scope">
-          {{ scope.row.author }}
+          {{ scope.row.position }}
         </template>
       </el-table-column>
       <el-table-column label="联系电话" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+          {{ scope.row.phone }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作">
-
-          <el-button :loading="downloadLoading" type="primary" icon="el-icon-edit" @click="handleEdit">
-            编辑
-          </el-button>
-          <el-button :loading="downloadLoading" type="danger" icon="el-icon-delete" @click="handleDel">
-            删除
-          </el-button>
-
+      <el-table-column align="center" label="操作" width="230">
+        <template slot-scope="{row,$index}">
+          <el-button type="primary" @click="handleUpdate(row)" icon="el-icon-edit">编辑</el-button>
+          <el-button type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete">删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="添加咨询师" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="姓名" :label-width="formLabelWidth">
-          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off" />
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="90px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入姓名" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="医院" :label-width="formLabelWidth">
-          <el-input v-model="form.hospital" placeholder="请输入姓名" autocomplete="off" />
+        <el-form-item label="医院" prop="hospital_name">
+          <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择所在医院" @change="getHospital('add',$event)">
+            <el-option v-for="item in hospitalOption" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="科室" :label-width="formLabelWidth">
-          <el-input v-model="form.department" placeholder="请输入姓名" autocomplete="off" />
+        <el-form-item label="职位" prop="position">
+          <el-input v-model="temp.position" placeholder="请输入职位" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.phone" placeholder="请输入联系电话" autocomplete="off" />
+        <el-form-item label="联系电话" prop="phone">
+          <el-input v-model="temp.phone" placeholder="请输入联系电话" autocomplete="off" />
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          确认
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+  import { doctorList,doctorAdd,doctorUpdate,doctorDel } from '@/api/doctor'
+  import { hospitalNameList } from '@/api/hospital'
+  import waves from '@/directive/waves' // waves directive
+  import { parseTime } from '@/utils'
+  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+  import { validatePhoneTwo } from '@/utils/validate'
 
 export default {
   name: 'ExportZip',
+  components: { Pagination },
+  directives: { waves },
   data() {
+    //自定义下拉框校验函数
+    const isSelect = (rule, value, callback) => {
+      if (value == 0) { //如果值是 0，提示用户选择正确的选项
+
+        return callback(new Error("请正确选择一级标题"));
+      } else if(value == undefined){
+        console.log('没选')
+      }else {
+        callback();
+        // return callback(new Error("请选择一级标题"));
+      }
+    }
     return {
       list: null,
+      hospitalOption:null,
       listLoading: true,
       downloadLoading: false,
       filename: '',
-      formInline: {
-        user: ''
+      listQuery: {
+        hospital_name: '',
+        hospital_id:undefined
       },
       dialogFormVisible: false,
-      form: {
+      temp: {
         name: '',
         phone:'',
-        department: '',
-        hospital:''
+        hospital_id:undefined,
+        hospital_name:'',
+        position:''
       },
-      formLabelWidth: '120px'
+      dialogStatus: '',
+      textMap: {
+        update: '修改医生信息',
+        create: '新增医生信息'
+      },
+      rules: {
+        name: [{ required: true, message: '姓名不能为空', trigger: 'change' }],
+        phone: [{ required: true, message: '联系电话不能为空', trigger: 'change' },{validator:validatePhoneTwo}],
+        hospital_name: [{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect}],
+      },
     }
   },
   created() {
     this.fetchData()
+    this.gethospitalName()
   },
   methods: {
+    getHospital(val,e){
+      if(val == 'add'){
+        this.temp.hospital_id = e
+      }else if(val=='filter'){
+        this.listQuery.hospital_id = e;
+        this.fetchData()
+      }
+    },
+    gethospitalName(){
+      hospitalNameList().then(response => {
+        this.hospitalOption = response.data
+      })
+    },
     async fetchData() {
-      console.log('bhjhh')
-      this.listLoading = true
-      const { data } = await fetchList()
-      this.list = data.items
+      this.listLoading = true;
+      const para = Object.assign({}, this.listQuery);
+      this.$delete(para,'hospital_name');
+      const { data } = await doctorList(para);
+      this.list = data;
       this.listLoading = false
     },
-    handleDownload() {
-
+    handleFilter() {
+      this.fetchData()
     },
-    handleEdit() {
-
+    resetTemp() {
+      this.temp = {
+        name: '',
+        phone:'',
+        hospital_id:undefined,
+        hospital_name:'',
+        position:''
+      }
     },
-    //删除
-    handleDel: function (index, row) {
-      this.$confirm('确定删除此条记录吗?', '提示', {
+    handleCreate() {
+      this.resetTemp();
+      this.dialogStatus = 'create';
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+        this.$delete(this.temp,'hospital_name');
+          doctorAdd(this.temp).then((res) => {
+            this.list.unshift(res.data);
+            this.dialogFormVisible = false;
+            this.$message({
+              message: '新增成功',
+              type: 'success'
+            });
+          })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.updateId=row.id;
+      this.temp = Object.assign({}, row); // copy obj
+      this.dialogStatus = 'update';
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          // this.$delete(this.temp,'id')
+          const tempData = Object.assign({}, this.temp);
+          this.$delete(tempData,'hospital_name');
+          doctorUpdate(this.temp.id,tempData).then((res) => {
+            const index = this.list.findIndex(v => v.id === this.temp.id);
+            this.list.splice(index, 1, res.data);
+            this.dialogFormVisible = false;
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            });
+          })
+        }
+      })
+    },
+    handleDelete(row, index) {
+      this.$confirm('确定删除此记录吗?', '提示', {
         type: 'warning'
       }).then(() => {
-        console.log('dianji')
         this.listLoading = true;
         //NProgress.start();
-        // let para = { id: row.id };
-        // removeUser(para).then((res) => {
-        //   this.listLoading = false;
-        //   //NProgress.done();
-        //   this.$message({
-        //     message: '删除成功',
-        //     type: 'success'
-        //   });
-        console.log('dianji')
-          this.fetchData();
-        // });
+        let para = {id: row.id};
+        doctorDel(row.id).then((res) => {
+          this.listLoading = false;
+          if(res.status == 0) {
+            this.list.splice(index, 1);
+            //NProgress.done();
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+          }
+          // this.getUsers();
+        });
       }).catch(() => {
 
       });
     },
-    handleAdd() {},
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
-    }
   }
 }
 </script>

@@ -1,0 +1,44 @@
+{
+  "id": "1678271",
+  "name": "医院管理系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "医院后台管理系统",
+  "glyphs": [
+    {
+      "icon_id": "742358",
+      "name": "医院",
+      "font_class": "yiyuan",
+      "unicode": "e6e1",
+      "unicode_decimal": 59105
+    },
+    {
+      "icon_id": "795554",
+      "name": "利润",
+      "font_class": "ai-profit",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "978424",
+      "name": "咨询",
+      "font_class": "zixun",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "12568074",
+      "name": "利息宝",
+      "font_class": "lixibao",
+      "unicode": "e738",
+      "unicode_decimal": 59192
+    },
+    {
+      "icon_id": "1986972",
+      "name": "曲线",
+      "font_class": "quxian",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    }
+  ]
+}

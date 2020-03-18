@@ -1,0 +1,313 @@
+<template>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-form :inline="true" :model="listQuery" class="search_form">
+        <el-form-item label="病人：">
+          <el-select v-model="listQuery.patient_name" filterable remote reserve-keyword placeholder="请输入姓名搜索" :remote-method="remoteMethod" :loading="loading" @change="changeHref('filter',$event)">
+            <el-option v-for="item in patientOption" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="开始日期：">
+          <el-date-picker v-model="listQuery.start_date" type="date" placeholder="选择开始日期" value-format="yyyy-MM-dd"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束日期：">
+          <el-date-picker v-model="listQuery.end_date" type="date" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            搜索
+          </el-button>
+        </el-form-item>
+      </el-form>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+        新增
+      </el-button>
+
+    </div>
+
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" stripe border fit highlight-current-row style="width: 100%;">
+      <el-table-column label="病人" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.patient_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="手术名称" align="center">
+        <template slot-scope="scope">
+            {{ scope.row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="手术日期" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.at_date }}
+        </template>
+      </el-table-column>
+      <el-table-column label="手术结果" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.result }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row,$index}">
+          <el-button type="primary" icon="el-icon-edit" @click="handleUpdate(row)">
+            编辑
+          </el-button>
+
+          <el-button icon="el-icon-delete" type="danger" @click="handleDelete(row,$index)">
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.page_size" @pagination="getList" class="text-right"/>
+
+    <el-dialog :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="病人" prop="patient_name">
+          <!--<el-select v-model="temp.patient_name" class="filter-item" placeholder="请选择">-->
+          <!--<el-option v-for="item in patientOption" :key="item" :label="item" :value="item" />-->
+          <!--</el-select>-->
+          <el-select v-model="temp.patient_name" filterable remote reserve-keyword placeholder="请输入姓名搜索" :remote-method="remoteMethod" :loading="loading" @change="changeHref('add',$event)">
+            <el-option v-for="item in patientOption" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="手术名称" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入手术名称"/>
+        </el-form-item>
+        <el-form-item label="手术日期" prop="at_date">
+          <el-date-picker v-model="temp.at_date" type="date" placeholder="请选择手术日期" @change="changeStartDate" value-format="yyyy-MM-dd" />
+        </el-form-item>
+        <el-form-item label="手术结果" prop="result">
+          <el-input v-model="temp.result" placeholder="请输入手术结果" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData(updateId)">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+  import { operationList,operationAdd,operationUpdate,operationDel,operationCount } from '@/api/operation'
+  import { nameSearch } from '@/api/patient'
+  import waves from '@/directive/waves' // waves directive
+  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+  export default {
+    name: 'ComplexTable',
+    components: { Pagination },
+    directives: { waves },
+    data() {
+      //自定义下拉框校验函数
+      const isSelect = (rule, value, callback) => {
+        if (value == 0) { //如果值是 0，提示用户选择正确的选项
+
+          return callback(new Error("请正确选择一级标题"));
+        } else if(value == undefined){
+          console.log('没选')
+        }else {
+          callback();
+          // return callback(new Error("请选择一级标题"));
+        }
+      };
+      return {
+        tableKey: 0,
+        list: null,
+        total: 0,
+        listLoading: true,
+        listQuery: {
+          page:1,
+          page_size:10,
+          patient_id: undefined,
+          patient_name:'',
+          start_date:'',
+          end_date: ''
+        },
+        hospitalOption:['中山医院','省立医院','友好医院'],
+        sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+        patientOption:[],
+        temp: {
+          name: '',
+          result: '',
+          at_date: '',
+          patient_id:undefined,
+          patient_name:''
+        },
+        dialogFormVisible: false,
+        dialogStatus: '',
+        rules: {
+          patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect}],
+          name: [{ required: true, message: '请输入手术名称', trigger: 'change' }],
+          at_date: [{ required: true, message: '请选择手术日期', trigger: 'change' }],
+          result: [{ required: true, message: '请输入手术结果', trigger: 'change' }]
+        },
+        loading: false,
+        updateId:undefined
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      changeStartDate(val){
+        this.temp.at_date=val
+      },
+      changeHref(val,e){
+        console.log(e)
+        if(val == 'add'){
+          this.temp.patient_id= e
+        }else if(val == 'filter'){
+          this.listQuery.patient_id= e;
+          this.listQuery.page = 1;
+          // this.getList()
+        }
+        // if(e=='go'){
+        //   this.$router.push('/data/patient')
+        // }
+      },
+      remoteMethod(query) {
+        if (query != '') {
+          this.loading = true;
+          nameSearch({prefix:query}).then((res) => {
+            this.loading = false;
+            this.patientOption = res.data
+            // this.patientOption.push({id:'go',name:'没有找到，点击新增病人'});
+          })
+        } else {
+          console.log('没参数')
+          nameSearch({prefix:''}).then((res) => {
+            this.loading = false;
+            this.patientOption = res.data
+            // this.patientOption.push({id:'go',name:'没有找到，点击新增病人'});
+          })
+        }
+      },
+      getList() {
+        this.listLoading = true
+        const para = Object.assign({}, this.listQuery);
+        para.page =  para.page - 1;
+        if(para.start_date == ''){
+          this.$delete(para,'start_date')
+        }
+        if(para.end_date == ''){
+          this.$delete(para,'end_date')
+        }
+        this.$delete(para,'patient_name');
+        operationList(para).then(response => {
+          this.list = response.data;
+          // this.total = response.data.total
+          this.listLoading = false
+        });
+        operationCount(para).then(response => {
+          this.total = response.data
+        })
+      },
+      getCount() {
+        const para = Object.assign({}, this.listQuery);
+        para.page =  para.page - 1;
+        if(para.start_date == ''){
+          this.$delete(para,'start_date')
+        }
+        if(para.end_date == ''){
+          this.$delete(para,'end_date')
+        }
+        this.$delete(para,'patient_name');
+        operationCount(para).then(response => {
+          this.total = response.data
+        })
+      },
+      handleFilter() {
+        this.listQuery.page = 1
+        this.getList()
+      },
+      resetTemp() {
+        this.temp = {
+          name: '',
+          result: '',
+          at_date: '',
+          patient_id:undefined,
+          patient_name:''
+        }
+      },
+      handleCreate() {
+        this.resetTemp();
+        this.dialogStatus = 'create';
+        this.dialogFormVisible = true;
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      createData() {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$delete(this.temp,'patient_name');
+            operationAdd(this.temp).then((res) => {
+              this.list.unshift(res.data);
+              this.dialogFormVisible = false;
+              this.getList();
+              this.$message({
+                message: '增加成功',
+                type: 'success'
+              });
+            })
+          }
+        })
+      },
+      handleUpdate(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.dialogStatus = 'update';
+        this.dialogFormVisible = true;
+        this.updateId = this.temp.id;
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      updateData(id) {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            const tempData = Object.assign({}, this.temp);
+            this.$delete(this.temp,'patient_name');
+            // this.$delete(this.temp,'id')
+            operationUpdate(id,tempData).then((res) => {
+              const index = this.list.findIndex(v => v.id === this.temp.id);
+              this.list.splice(index, 1, res.data);
+              this.dialogFormVisible = false;
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+            })
+          }
+        })
+      },
+      handleDelete(row, index) {
+        this.$confirm('确定删除此记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          //NProgress.start();
+          operationDel(row.id).then((res) => {
+            this.listLoading = false;
+            if(res.status == 0) {
+              this.list.splice(index, 1);
+              //NProgress.done();
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.getCount();
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
+    }
+  }
+</script>

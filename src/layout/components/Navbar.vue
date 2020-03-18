@@ -17,11 +17,12 @@
         <!--</el-tooltip>-->
 
       <!--</template>-->
-
+      <span class="date">{{systemDate}}</span>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
           <img :src="headImg" class="user-avatar">
+          <span style="float: right;margin: 0 5px; font-size: 14px">{{name}}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -38,7 +39,7 @@
 <!--            <el-dropdown-item>Docs</el-dropdown-item>-->
 <!--          </a>-->
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">退 出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -55,11 +56,14 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import headImg from '@/assets/headImg/img.png'
+import { getToken, setToken, removeToken,getId,setId,removeId,getName,setName,removeName } from '@/utils/auth'
 
 export default {
   data() {
     return {
       headImg: headImg,
+      systemDate:'',
+      name:getName()
     }
   },
   components: {
@@ -74,7 +78,7 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'device'
+      'device',
     ])
   },
   methods: {
@@ -83,19 +87,30 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login?redirect=/dashboard`)
     },
     addDate() {
-      nowDate = new Date();
+      let nowDate = new Date();
       let date = {
         year: nowDate.getFullYear(),
         month: nowDate.getMonth() + 1,
         date: nowDate.getDate(),
+      };
+      if(date.month<10 && date.date<10){
+        this.systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
+      }else if(date.month<10 && date.date>10){
+        this.systemDate = date.year + '-' + 0 + date.month + '-' + date.date;
+      }else if(date.month>10 && date.date<10){
+        this.systemDate = date.year + '-' + date.month + '-' + 0 + date.date;
+      }else {
+        this.systemDate = date.year + '-' + date.month + '-' + date.date;
       }
-      console.log(date);
-      let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
     }
-  }
+  },
+  mounted() {
+    this.addDate();
+  },
 }
 </script>
 
@@ -127,6 +142,15 @@ export default {
   .errLog-container {
     display: inline-block;
     vertical-align: top;
+  }
+  .date{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 50px;
+    display: inline-block;
+    height: 100%;
+    float: left;
+    margin-right: 20px;
   }
 
   .right-menu {
@@ -160,7 +184,7 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        /*margin-top: 5px;*/
         position: relative;
 
         .user-avatar {
@@ -168,13 +192,14 @@ export default {
           width: 40px;
           height: 40px;
           border-radius: 10px;
+          margin-top: 5px;
         }
 
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 20px;
           font-size: 12px;
         }
       }

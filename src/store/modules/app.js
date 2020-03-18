@@ -6,7 +6,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  size: Cookies.get('size') || 'medium',
 }
 
 const mutations = {
@@ -18,6 +18,7 @@ const mutations = {
     } else {
       Cookies.set('sidebarStatus', 0)
     }
+    console.log('cookies4444')
   },
   CLOSE_SIDEBAR: (state, withoutAnimation) => {
     Cookies.set('sidebarStatus', 0)
@@ -30,6 +31,7 @@ const mutations = {
   SET_SIZE: (state, size) => {
     state.size = size
     Cookies.set('size', size)
+    console.log('cookies4444')
   }
 }
 

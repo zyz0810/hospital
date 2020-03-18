@@ -203,3 +203,56 @@ aside {
    font-size: 20px;
    margin-bottom: 20px;
  }
+
+ .patient_name:hover{
+   font-weight: bold;
+ }
+.search_form .el-form-item{
+  margin-right: 100px !important;
+}
+.el-date-table td.available:hover {
+  font-size: 22px;
+}
+.el-date-table{
+  font-size: 16px;
+}
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+.el-table--medium th{
+  padding: 17px 0;
+}
+.legend_span{
+  font-family: PingFang SC;
+  font-size: 14px;
+  width: 130px;
+  margin: 10px 10px 10px 0;
+  color: #666;
+  &>div{
+    margin-bottom: 10px;
+  }
+  .color_block{
+    width: 20px;
+    height: 13px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .color_line{
+    width: 20px;
+    height: 2px;
+    display: inline-block;
+  }
+  &.legend_inline{
+    width: 100%;
+    margin-bottom: -30px;
+    position: relative;
+    z-index: 999;
+    &>div{
+      display: inline-block;
+      margin: 0 20px;
+    }
+  }
+}
+.el-table thead{
+  color: #000;
+}

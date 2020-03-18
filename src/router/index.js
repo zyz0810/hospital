@@ -7,10 +7,8 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -84,137 +82,158 @@ export const constantRoutes = [
     ]
   },
   // {
-  //   path: '/documentation',
+  //   path: '/user',
   //   component: Layout,
+  //   redirect: '/user/counselor',
+  //   alwaysShow: true,
+  //   name: '用户管理',
+  //   meta: { title: '用户管理', icon: 'user' },
   //   children: [
+  //
   //     {
-  //       path: 'index',
-  //       component: () => import('@/views/documentation/index'),
-  //       name: 'Documentation',
-  //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
+  //       path: 'counselor',
+  //       component: () => import('@/views/user/index'),
+  //       name: '咨询师',
+  //       meta: { title: '咨询师' }
+  //     },
+  //     {
+  //       path: 'doctor',
+  //       component: () => import('@/views/user/doctor'),
+  //       name: '医生',
+  //       meta: { title: '医生' }
+  //     },
+  //     // {
+  //     //   path: 'assistant',
+  //     //   component: () => import('@/views/user/assistant'),
+  //     //   name: '助理',
+  //     //   meta: { title: '助理' }
+  //     // },
+  //     {
+  //       path: 'return',
+  //       component: () => import('@/views/user/return'),
+  //       name: '回访人员',
+  //       meta: { title: '回访人员' }
+  //     },
+  //     {
+  //       path: 'account',
+  //       component: () => import('@/views/user/account'),
+  //       name: '系统账户',
+  //       meta: { title: '系统账户' }
+  //     },
+  //   ]
+  // },
+  // {
+  //   path: '/hospital',
+  //   component: Layout,
+  //   redirect: '/hospital/list',
+  //   name: '医院管理',
+  //   meta: {
+  //     title: '医院管理',
+  //     icon: 'example'
+  //   },
+  //   children: [
+  //     // {
+  //     //   path: 'create',
+  //     //   component: () => import('@/views/example/create'),
+  //     //   name: '添加医院详情',
+  //     //   meta: { title: '添加医院详情' }
+  //     // },
+  //     {
+  //       path: 'view/:id(\\d+)',
+  //       component: () => import('@/views/hospital/view'),
+  //       name: '医院详情',
+  //       meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/hospital/list'),
+  //       name: '医院列表',
+  //       meta: { title: '医院列表' }
   //     }
   //   ]
   // },
   // {
-  //   path: '/guide',
+  //   path: '/data',
   //   component: Layout,
-  //   redirect: '/guide/index',
+  //   redirect: '/data/patient',
+  //   name: '数据录入',
+  //   meta: {
+  //     title: '数据录入',
+  //     icon: 'excel'
+  //   },
   //   children: [
   //     {
-  //       path: 'index',
-  //       component: () => import('@/views/guide/index'),
-  //       name: 'Guide',
-  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
+  //       path: 'patient',
+  //       component: () => import('@/views/data/patient'),
+  //       name: '病人',
+  //       meta: { title: '病人' }
+  //     },
+  //     {
+  //       path: 'consult',
+  //       component: () => import('@/views/data/consult'),
+  //       name: '咨询',
+  //       meta: { title: '咨询' }
+  //     },
+  //     {
+  //       path: 'custorm/:id(\\d+)',
+  //       component: () => import('@/views/patient/view'),
+  //       name: '病人基本信息页',
+  //       meta: { title: '病人基本信息页', noCache: true, activeMenu: '/data/patient' },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'outpatient',
+  //       component: () => import('@/views/data/outpatient'),
+  //       name: '门诊',
+  //       meta: { title: '门诊' }
+  //     },
+  //     {
+  //       path: 'addOutpatient',
+  //       component: () => import('@/views/data/addOutpatient'),
+  //       name: '门诊记录',
+  //       meta: { title: '门诊记录' },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'return',
+  //       component: () => import('@/views/data/return'),
+  //       name: '回访',
+  //       meta: { title: '回访' }
+  //     },
+  //     {
+  //       path: 'pay',
+  //       component: () => import('@/views/data/pay'),
+  //       name: '缴费',
+  //       meta: { title: '缴费' }
+  //     },
+  //     {
+  //       path: 'hospitalization',
+  //       component: () => import('@/views/data/hospitalization'),
+  //       name: '住院',
+  //       meta: { title: '住院' }
+  //     },
+  //     {
+  //       path: 'operation',
+  //       component: () => import('@/views/data/operation'),
+  //       name: '手术',
+  //       meta: { title: '手术' }
+  //     },
+  //     {
+  //       path: 'doctor',
+  //       component: () => import('@/views/data/doctor'),
+  //       name: '医生收入',
+  //       meta: { title: '医生收入' }
   //     }
   //   ]
   // },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
-      }
-    ]
-  }
-]
-
+  // chartsRouter,
+];
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
-
-  // {
-  //   path: '/icon',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/icons/index'),
-  //       name: 'Icons',
-  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
-  //     }
-  //   ]
-  // },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/counselor',
-    alwaysShow: true,
-    name: '用户管理',
-    meta: { title: '用户管理', icon: 'user' },
-    children: [
-
-      {
-        path: 'counselor',
-        component: () => import('@/views/user/index'),
-        name: '咨询师',
-        meta: { title: '咨询师' }
-      },
-      {
-        path: 'doctor',
-        component: () => import('@/views/user/doctor'),
-        name: '医生',
-        meta: { title: '医生' }
-      },
-      {
-        path: 'assistant',
-        component: () => import('@/views/user/assistant'),
-        name: '助理',
-        meta: { title: '助理' }
-      },
-      {
-        path: 'return',
-        component: () => import('@/views/user/return'),
-        name: '回访人员',
-        meta: { title: '回访人员' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: '医生详情',
-        meta: { title: '医生详情', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/hospital',
-    component: Layout,
-    redirect: '/hospital/list',
-    name: '医院管理',
-    meta: {
-      title: '医院管理',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/hospital/list'),
-        name: '医院',
-        meta: { title: '医院列表' }
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/hospital/list'),
-        name: '医院列表',
-        meta: { title: '医院列表' }
-      },
-      {
-        path: 'view/:id(\\d+)',
-        component: () => import('@/views/hospital/view'),
-        name: '医院详情',
-        meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
-        hidden: true
-      }
-    ]
-  },
+export const asyncRoutesData = [
   {
     path: '/data',
     component: Layout,
@@ -232,225 +251,383 @@ export const asyncRoutes = [
         meta: { title: '病人' }
       },
       {
+        path: 'custorm/:id(\\d+)',
+        component: () => import('@/views/patient/view'),
+        name: '病人基本信息页',
+        meta: { title: '病人基本信息页', noCache: true, activeMenu: '/data/patient' },
+        hidden: true
+      },
+    ]
+  },
+];
+// export const asyncRoutes = [
+//   {
+//     path: '/user',
+//     component: Layout,
+//     redirect: '/user/counselor',
+//     alwaysShow: true,
+//     name: '用户管理',
+//     meta: { title: '用户管理', icon: 'user' },
+//     children: [
+//
+//       {
+//         path: 'counselor',
+//         component: () => import('@/views/user/index'),
+//         name: '咨询师',
+//         meta: { title: '咨询师' }
+//       },
+//       {
+//         path: 'doctor',
+//         component: () => import('@/views/user/doctor'),
+//         name: '医生',
+//         meta: { title: '医生' }
+//       },
+//       // {
+//       //   path: 'assistant',
+//       //   component: () => import('@/views/user/assistant'),
+//       //   name: '助理',
+//       //   meta: { title: '助理' }
+//       // },
+//       {
+//         path: 'return',
+//         component: () => import('@/views/user/return'),
+//         name: '回访人员',
+//         meta: { title: '回访人员' }
+//       },
+//       {
+//         path: 'account',
+//         component: () => import('@/views/user/account'),
+//         name: '系统账户',
+//         meta: { title: '系统账户' }
+//       },
+//     ]
+//   },
+// ];
+export const asyncRoutesHospital = [
+  {
+    path: '/hospital',
+    component: Layout,
+    redirect: '/hospital/list',
+    name: '医院管理',
+    meta: {
+      title: '医院管理',
+      icon: 'example'
+    },
+    children: [
+      // {
+      //   path: 'create',
+      //   component: () => import('@/views/example/create'),
+      //   name: '添加医院详情',
+      //   meta: { title: '添加医院详情' }
+      // },
+      {
+        path: 'view/:id(\\d+)',
+        component: () => import('@/views/hospital/view'),
+        name: '医院详情',
+        meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/hospital/list'),
+        name: '医院列表',
+        meta: { title: '医院列表' }
+      }
+    ]
+  },
+];
+export const asyncRoutesOutpatient = {
+        path: 'outpatient',
+        component: () => import('@/views/data/outpatient'),
+        name: '门诊',
+        meta: { title: '门诊' }
+      };
+export const asyncRoutesPay = {
+        path: 'pay',
+        component: () => import('@/views/data/pay'),
+        name: '缴费',
+        meta: { title: '缴费' }
+      };
+export const asyncRoutesHospitalization = {
+        path: 'hospitalization',
+        component: () => import('@/views/data/hospitalization'),
+        name: '住院',
+        meta: { title: '住院' }
+      };
+export const asyncRoutesOperation = {
+        path: 'operation',
+        component: () => import('@/views/data/operation'),
+        name: '手术',
+        meta: { title: '手术' }
+      };
+export const asyncRoutesConsult ={
         path: 'consult',
         component: () => import('@/views/data/consult'),
         name: '咨询',
         meta: { title: '咨询' }
+      };
+export const asyncRoutesReturn = {
+        path: 'return',
+        component: () => import('@/views/data/return'),
+        name: '回访',
+        meta: { title: '回访' }
+      };
+export const asyncRoutesDoctor = {
+        path: 'doctor',
+        component: () => import('@/views/data/doctor'),
+        name: '医生收入',
+        meta: { title: '医生收入' }
+      };
+export const asyncRoutesChart = [
+  {
+    path: '/charts',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: '报表展示',
+    meta: {
+      title: '报表展示',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'revenue11',
+        component: () => import('@/views/charts/revenue'),
+        name: '报表详情',
+        meta: { title: '报表详情', noCache: true },
+        hidden:true
+      },
+    ]
+  }
+];
+export const asyncRoutesRevenue = {
+        path: 'revenue',
+        component: () => import('@/views/charts/revenue'),
+        name: '营收报表',
+        meta: { title: '营收报表', noCache: true }
+      };
+export const asyncRoutesOperate = {
+        path: 'operate',
+        component: () => import('@/views/charts/operate'),
+        name: '运营报表',
+        meta: { title: '运营报表', noCache: true }
+      };
+export const asyncRoutesPerformance = {
+        path: 'performance',
+        component: () => import('@/views/charts/performance'),
+        name: '员工绩效',
+        meta: { title: '员工绩效', noCache: true }
+      };
+
+
+
+export  const asyncRoutes=[
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import('@/views/dashboard/index'),
+  //       name: '首页',
+  //       meta: { title: '首页', icon: 'dashboard', affix: true,roles: ['首页'] }
+  //     }
+  //   ]
+  // },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: 'noRedirect',
+    alwaysShow: true,
+    name: '用户管理',
+    meta: {
+      title: '用户管理',
+      icon: 'user',
+      roles: ['用户管理权限']
+    },
+    children: [
+
+      {
+        path: 'counselor',
+        component: () => import('@/views/user/index'),
+        name: '咨询师',
+        meta: { title: '咨询师' }
+      },
+      {
+        path: 'doctor',
+        component: () => import('@/views/user/doctor'),
+        name: '医生',
+        meta: { title: '医生' }
+      },
+      // {
+      //   path: 'assistant',
+      //   component: () => import('@/views/user/assistant'),
+      //   name: '助理',
+      //   meta: { title: '助理' }
+      // },
+      {
+        path: 'return',
+        component: () => import('@/views/user/return'),
+        name: '回访人员',
+        meta: { title: '回访人员' }
+      },
+      {
+        path: 'account',
+        component: () => import('@/views/user/account'),
+        name: '系统账户',
+        meta: { title: '系统账户' }
+      },
+    ]
+  },
+  {
+    path: '/hospital',
+    component: Layout,
+    redirect: '/hospital/list',
+    name: '医院管理',
+    meta: {
+      title: '医院管理',
+      icon: 'example',
+      roles: ['医院权限']
+    },
+    children: [
+      // {
+      //   path: 'create',
+      //   component: () => import('@/views/example/create'),
+      //   name: '添加医院详情',
+      //   meta: { title: '添加医院详情' }
+      // },
+      {
+        path: 'view/:id(\\d+)',
+        component: () => import('@/views/hospital/view'),
+        name: '医院详情',
+        meta: { title: '医院详情', noCache: true, activeMenu: '/hospital/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/hospital/list'),
+        name: '医院列表',
+        meta: { title: '医院列表' }
+      }
+    ]
+  },
+  {
+    path: '/data',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: '数据录入',
+    meta: {
+      title: '数据录入',
+      icon: 'excel'
+    },
+    children: [
+      {
+        path: 'patient',
+        component: () => import('@/views/data/patient'),
+        name: '病人',
+        meta: { title: '病人' }
       },
       {
         path: 'custorm/:id(\\d+)',
         component: () => import('@/views/patient/view'),
         name: '病人基本信息页',
-        meta: { title: '病人基本信息页', noCache: true, activeMenu: '/excel/export-excel' },
+        meta: { title: '病人基本信息页', noCache: true, activeMenu: '/data/patient' },
         hidden: true
+      },
+      {
+        path: 'consult',
+        component: () => import('@/views/data/consult'),
+        name: '咨询',
+        meta: { title: '咨询',
+          roles: ['咨询权限'] }
       },
       {
         path: 'outpatient',
         component: () => import('@/views/data/outpatient'),
         name: '门诊',
-        meta: { title: '门诊' }
+        meta: { title: '门诊',
+          roles: ['门诊权限'] }
       },
+      // {
+      //   path: 'addOutpatient',
+      //   component: () => import('@/views/data/addOutpatient'),
+      //   name: '门诊记录',
+      //   meta: { title: '门诊记录' },
+      //   hidden: true
+      // },
       {
         path: 'return',
         component: () => import('@/views/data/return'),
         name: '回访',
-        meta: { title: '回访' }
+        meta: { title: '回访' ,
+          roles: ['回访权限']}
+      },
+      {
+        path: 'pay',
+        component: () => import('@/views/data/pay'),
+        name: '缴费',
+        meta: { title: '缴费',
+          roles: ['缴费权限'] }
+      },
+      {
+        path: 'hospitalization',
+        component: () => import('@/views/data/hospitalization'),
+        name: '住院',
+        meta: { title: '住院' ,
+          roles: ['住院权限']}
+      },
+      {
+        path: 'operation',
+        component: () => import('@/views/data/operation'),
+        name: '手术',
+        meta: { title: '手术',
+          roles: ['手术权限'] }
+      },
+      {
+        path: 'doctor',
+        component: () => import('@/views/data/doctor'),
+        name: '医生收入',
+        meta: { title: '医生收入',
+          roles: ['医生权限'] }
       }
     ]
   },
-  chartsRouter,
-  // {
-  //   path: '/user',
-  //   component: Layout,
-  //   redirect: '/user/download',
-  //   alwaysShow: true,
-  //   name: '报表展示',
-  //   meta: { title: '报表展示', icon: 'user' },
-  //   children: [
-  //     {
-  //       path: 'download',
-  //       component: () => import('@/views/user/index'),
-  //       name: '营收报表',
-  //       meta: { title: '营收报表' }
-  //     },
-  //     {
-  //       path: 'download',
-  //       component: () => import('@/views/user/index'),
-  //       name: '运营报表',
-  //       meta: { title: '运营报表' }
-  //     },
-  //     {
-  //       path: 'download',
-  //       component: () => import('@/views/user/index'),
-  //       name: '客户报表',
-  //       meta: { title: '客户报表' }
-  //     },
-  //     {
-  //       path: 'download',
-  //       component: () => import('@/views/user/index'),
-  //       name: '员工绩效',
-  //       meta: { title: '员工绩效' }
-  //     }
-  //   ]
-  // },
-
-  /** when your routing map is too long, you can split it into small modules **/
-  // componentsRouter,
-  //
-  // nestedRouter,
-  tableRouter,
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission/page',
-  //   alwaysShow: true, // will always show the root menu
-  //   name: 'Permission',
-  //   meta: {
-  //     title: 'Permission',
-  //     icon: 'lock',
-  //     roles: ['admin', 'editor'] // you can set roles in root nav
-  //   },
-  //   children: [
-  //     {
-  //       path: 'page',
-  //       component: () => import('@/views/permission/page'),
-  //       name: 'PagePermission',
-  //       meta: {
-  //         title: 'Page Permission',
-  //         roles: ['admin'] // or you can only set roles in sub nav
-  //       }
-  //     },
-  //     {
-  //       path: 'directive',
-  //       component: () => import('@/views/permission/directive'),
-  //       name: 'DirectivePermission',
-  //       meta: {
-  //         title: 'Directive Permission'
-  //         // if do not set roles, means: this page does not require permission
-  //       }
-  //     },
-  //     {
-  //       path: 'role',
-  //       component: () => import('@/views/permission/role'),
-  //       name: 'RolePermission',
-  //       meta: {
-  //         title: 'Role Permission',
-  //         roles: ['admin']
-  //       }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/tab',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/tab/index'),
-  //       name: 'Tab',
-  //       meta: { title: 'Tab', icon: 'tab' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/error',
-  //   component: Layout,
-  //   redirect: 'noRedirect',
-  //   name: '医院管理',
-  //   meta: {
-  //     title: '医院管理',
-  //     icon: '404'
-  //   },
-  //   children: [
-  //     {
-  //       path: '401',
-  //       component: () => import('@/views/error-page/401'),
-  //       name: '医院列表',
-  //       meta: { title: '医院列表', noCache: true }
-  //     },
-  //     {
-  //       path: '404',
-  //       component: () => import('@/views/error-page/404'),
-  //       name: '医院详情',
-  //       meta: { title: '医院详情', noCache: true }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/error-log',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'log',
-  //       component: () => import('@/views/error-log/index'),
-  //       name: 'ErrorLog',
-  //       meta: { title: 'Error Log', icon: 'bug' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/pdf',
-  //   component: Layout,
-  //   redirect: '/pdf/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/pdf/index'),
-  //       name: 'PDF',
-  //       meta: { title: 'PDF', icon: 'pdf' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/pdf/download',
-  //   component: () => import('@/views/pdf/download'),
-  //   hidden: true
-  // },
-
-  // {
-  //   path: '/theme',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/theme/index'),
-  //       name: 'Theme',
-  //       meta: { title: 'Theme', icon: 'theme' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/clipboard',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/clipboard/index'),
-  //       name: 'ClipboardDemo',
-  //       meta: { title: 'Clipboard', icon: 'clipboard' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://github.com/PanJiaChen/vue-element-admin',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '/charts',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: '报表展示',
+    meta: {
+      title: '报表展示',
+      icon: 'chart' ,
+      roles: ['报表权限','运营权限','绩效权限']
+    },
+    children: [
+      {
+        path: 'revenue',
+        component: () => import('@/views/charts/revenue'),
+        name: '营收报表',
+        meta: { title: '营收报表', noCache: true ,
+          roles: ['报表权限']}
+      },
+      {
+        path: 'operate',
+        component: () => import('@/views/charts/operate'),
+        name: '运营报表',
+        meta: { title: '运营报表', noCache: true,
+          roles: ['运营权限'] }
+      },
+      {
+        path: 'performance',
+        component: () => import('@/views/charts/performance'),
+        name: '员工绩效',
+        meta: { title: '员工绩效', noCache: true ,
+          roles: ['绩效权限']}
+      }
+    ]
+  }
 ]
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
