@@ -48,7 +48,7 @@ router.beforeEach(async(to, from, next) => {
 
           // dynamically add accessible routes
 
-          router.addRoutes(accessRoutes)
+          router.addRoutes(accessRoutes);
 
 
           // debugger

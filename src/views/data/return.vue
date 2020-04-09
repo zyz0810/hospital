@@ -41,7 +41,10 @@
       </el-table-column>
       <el-table-column label="客户" align="center">
         <template slot-scope="scope">
-          {{ scope.row.patient_name }}
+          <!--{{ scope.row.patient_name }}-->
+          <router-link :to="'/data/custorm/'+scope.row.patient_id" class="el-link el-link--primary is-underline patient_name">
+            {{ scope.row.patient_name }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="回访人员" align="center">
@@ -264,6 +267,7 @@
       },
       handleCreate() {
         this.resetTemp();
+        this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -289,6 +293,7 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row); // copy obj
+        this.patientOption=[];
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;
         this.$nextTick(() => {

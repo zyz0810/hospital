@@ -65,7 +65,7 @@
 
         <div class="title">合作项目</div>
         <div class="div_table">
-          <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate('project')">新增</el-button>
+          <el-button style="margin-bottom:20px" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate('project')">新增</el-button>
           <el-table ref="multipleTable" v-loading="listLoading" :data="projectsList" element-loading-text="拼命加载中" stripe border fit highlight-current-row>
           <el-table-column label="项目名称" align="center">
             <template slot-scope="scope">
@@ -261,8 +261,7 @@ export default {
   methods: {
     fetchData() {
       var id = this.$route.params && this.$route.params.id;
-      console.log('id:'+id)
-      this.listLoading = true
+      this.listLoading = true;
       hospitalView(id).then(response => {
         this.formInline = response.data;
         this.listLoading = false

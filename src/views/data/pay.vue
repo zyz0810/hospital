@@ -41,7 +41,10 @@
     <el-table :key="tableKey" v-loading="listLoading" :data="list" stripe border fit highlight-current-row style="width: 100%;">
       <el-table-column label="病人" align="center">
         <template slot-scope="scope">
+            <!--{{ scope.row.patient_name }}-->
+          <router-link :to="'/data/custorm/'+scope.row.patient_id" class="el-link el-link--primary is-underline patient_name">
             {{ scope.row.patient_name }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="医院" align="center">
@@ -59,7 +62,7 @@
           {{ scope.row.type }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center">
+      <el-table-column label="项目" align="center">
         <template slot-scope="scope">
           {{ scope.row.project_name }}
         </template>
@@ -107,7 +110,7 @@
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="名称" prop="project_name">
+        <el-form-item label="项目" prop="project_name">
           <el-select v-model="temp.project_name" class="filter-item" :placeholder="temp.hospital_id==undefined ?'请先选择医院':'请选择项目'" :disabled="temp.hospital_id==undefined ? true:false" @change="changeProject('add',$event)">
             <el-option v-for="item in projectsOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
@@ -198,8 +201,8 @@
           patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect }],
           hospital_name: [{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect}],
           project_name:[{ required: true, message: '请选择项目', trigger: 'change',validator: isSelect }],
-          doctor_name:[{ required: true, message: '请选医生', trigger: 'change',validator: isSelect }],
-          type:[{ required: true, message: '请选缴费类型', trigger: 'change',validator: isSelect }],
+          doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect }],
+          type:[{ required: true, message: '请选择缴费类型', trigger: 'change',validator: isSelect }],
           pay_date:[{ required: true, message: '请选择缴费日期', trigger: 'change',validator: isSelect }],
           amount:[{ required: true, message: '请填写缴费数目', trigger: 'change' }],
         },
@@ -344,6 +347,7 @@
       },
       handleCreate() {
         this.resetTemp();
+        this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -370,6 +374,7 @@
         })
       },
       handleUpdate(row) {
+        this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
         this.updateId = row.id;
         this.dialogStatus = 'update';

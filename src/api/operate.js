@@ -9,7 +9,14 @@ export function weekCount(query) {
     params: query
   })
 }
-
+//  客户年龄分布
+export function ageStatics(query) {
+  return request({
+    url: '/api/report/patients/age/statics',
+    method: 'get',
+    params: query
+  })
+}
 //  客户地区分布（地图）
 export function patientsArea(query) {
   return request({
@@ -19,4 +26,11 @@ export function patientsArea(query) {
   })
 }
 
-
+//  门诊来源统计（渠道）
+export function sourceOut(query) {
+  return request({
+    url: '/api/report/outpatients/source/statics',
+    method: 'get',
+    params: query
+  })
+}

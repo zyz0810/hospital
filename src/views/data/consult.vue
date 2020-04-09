@@ -1,8 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-
-
       <el-form :inline="true" :model="listQuery" class="search_form">
         <el-form-item label="病人：">
           <!--<el-input v-model="listQuery.patient_name" placeholder="姓名" style="width: 200px;" class="filter-item" />-->
@@ -22,13 +20,8 @@
           </el-button>
         </el-form-item>
       </el-form>
-
-
-
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
-
     </div>
-
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row stripe style="width: 100%;">
       <el-table-column label="咨询日期" align="center">
         <template slot-scope="scope">
@@ -277,6 +270,7 @@
       },
       handleCreate() {
         this.resetTemp();
+        this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -302,6 +296,7 @@
         })
       },
       handleUpdate(row) {
+        this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;

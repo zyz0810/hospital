@@ -308,9 +308,9 @@ export const asyncRoutesHospital = [
     path: '/hospital',
     component: Layout,
     redirect: '/hospital/list',
-    name: '医院管理',
+    name: '系统设置',
     meta: {
-      title: '医院管理',
+      title: '系统设置',
       icon: 'example'
     },
     children: [
@@ -332,6 +332,18 @@ export const asyncRoutesHospital = [
         component: () => import('@/views/hospital/list'),
         name: '医院列表',
         meta: { title: '医院列表' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/data/source'),
+        name: '门诊来源',
+        meta: { title: '门诊来源' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/data/disease'),
+        name: '门诊病种',
+        meta: { title: '门诊病种' }
       }
     ]
   },
@@ -468,8 +480,8 @@ export  const asyncRoutes=[
       {
         path: 'return',
         component: () => import('@/views/user/return'),
-        name: '回访人员',
-        meta: { title: '回访人员' }
+        name: '回访员',
+        meta: { title: '回访员' }
       },
       {
         path: 'account',
@@ -483,9 +495,9 @@ export  const asyncRoutes=[
     path: '/hospital',
     component: Layout,
     redirect: '/hospital/list',
-    name: '医院管理',
+    name: '系统设置',
     meta: {
-      title: '医院管理',
+      title: '系统设置',
       icon: 'example',
       roles: ['医院权限']
     },
@@ -508,6 +520,18 @@ export  const asyncRoutes=[
         component: () => import('@/views/hospital/list'),
         name: '医院列表',
         meta: { title: '医院列表' }
+      },
+      {
+        path: 'source',
+        component: () => import('@/views/data/source'),
+        name: '门诊来源',
+        meta: { title: '门诊来源' }
+      },
+      {
+        path: 'disease',
+        component: () => import('@/views/data/disease'),
+        name: '门诊病种',
+        meta: { title: '门诊病种' }
       }
     ]
   },
@@ -583,13 +607,13 @@ export  const asyncRoutes=[
         meta: { title: '手术',
           roles: ['手术权限'] }
       },
-      {
-        path: 'doctor',
-        component: () => import('@/views/data/doctor'),
-        name: '医生收入',
-        meta: { title: '医生收入',
-          roles: ['医生权限'] }
-      }
+      // {
+      //   path: 'doctor',
+      //   component: () => import('@/views/data/doctor'),
+      //   name: '医生收入',
+      //   meta: { title: '医生收入',
+      //     roles: ['医生权限'] }
+      // }
     ]
   },
   {
@@ -622,6 +646,13 @@ export  const asyncRoutes=[
         component: () => import('@/views/charts/performance'),
         name: '员工绩效',
         meta: { title: '员工绩效', noCache: true ,
+          roles: ['绩效权限']}
+      },
+      {
+        path: 'hospital',
+        component: () => import('@/views/charts/hospital'),
+        name: '医院报表',
+        meta: { title: '医院报表', noCache: true ,
           roles: ['绩效权限']}
       }
     ]

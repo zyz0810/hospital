@@ -36,3 +36,27 @@ export function projectsName() {
   })
 }
 
+//  当月各医院营收
+export function hospitalTurnover() {
+  return request({
+    url: '/api/report/month/hospital/turnover',
+    method: 'get',
+  })
+}
+
+//  病种半年营收按月报表
+export function diseaseTurnover(query) {
+  return request({
+    url: '/api/report/disease/total',
+    method: 'get',
+    params: query
+  })
+}
+//  半年的来源每月收入
+export function sourceTurnover(query) {
+  return request({
+    url: '/api/report/source/total',
+    method: 'get',
+    params: query
+  })
+}

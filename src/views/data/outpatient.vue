@@ -47,6 +47,11 @@
           {{ scope.row.hospital_name }}
         </template>
       </el-table-column>
+      <el-table-column label="病种" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.disease }}
+        </template>
+      </el-table-column>
       <el-table-column label="门诊日期" align="center">
         <template slot-scope="scope">
           {{ scope.row.register_date }}
@@ -90,7 +95,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="来源" prop="source">
-          <el-input v-model="temp.source" placeholder="请填写来源"/>
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.source" class="filter-item" placeholder="请选择门诊来源" @change="getSource('add',$event)">
+            <el-option v-for="item in sourceOption" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="医院" prop="hospital_name">
           <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择医院" @change="getHospital('add',$event)">
@@ -100,6 +108,12 @@
         <el-form-item label="接诊医生" prop="doctor_name">
           <el-select v-model="temp.doctor_name" prop="doctor_name" class="filter-item" :placeholder="temp.hospital_id==undefined ?'请先选择医院':'请选择医生'" :disabled="temp.hospital_id==undefined ? true:false" @change="getDoctor('add',$event)">
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="病种" prop="disease">
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.disease" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">
+            <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="挂号类型" prop="type">
@@ -133,6 +147,8 @@
 
 <script>
   import { outpatientList,outpatientAdd,outpatientUpdate,outpatientDel,outpatientCount } from '@/api/outpatient'
+  import { sourceList } from '@/api/source'
+  import { diseaseList } from '@/api/disease'
   import { hospitalNameList,doctorList } from '@/api/hospital'
   import { nameSearch } from '@/api/patient'
   import waves from '@/directive/waves' // waves directive
@@ -181,18 +197,25 @@
           patient_name:'',
           hospital_name:'',
           doctor_name:'',
-          source:'',
           type: '',
           // department:'',
           register_date:'',
-          result:''
+          result:'',
+          source_id:undefined,
+          source:'',
+          disease_id:undefined,
+          disease:''
         },
+        diseaseOption:[],
+        sourceOption:[],
         dialogFormVisible: false,
         dialogStatus: '',
         rules: {
           patient_name: [{ required: true, message: '请填写病人姓名', trigger: 'change' ,validator: isSelect }],
           hospital_name:[{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect  }],
           doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect  }],
+          disease:[{ required: true, message: '请选择门诊病种', trigger: 'change',validator: isSelect  }],
+          source:[{ required: true, message: '请选择门诊来源', trigger: 'change',validator: isSelect  }],
         },
         doctorOption: [],
         loading: false,
@@ -200,47 +223,11 @@
     },
     created() {
       this.getList();
-      this.gethospitalName()
-
-      // this.xier([12,9,38,44,7,98,35,59,49,88,38]);
-      this.aa()
+      this.gethospitalName();
+      this.getOutData()
     },
 
     methods: {
-      xier(arr){
-    var interval = parseInt(arr.length / 2);  //分组间隔设置
-    while(interval > 0){
-      for(var i = 0 ; i < arr.length ; i ++){
-        var n = i;
-        while(arr[n] < arr[n - interval] && n > 0){
-          console.log('n=='+n)
-          console.log('arr='+arr[n])
-          console.log('arr[n - interval]:'+arr[n - interval])
-          var temp = arr[n];
-          arr[n] = arr[n - interval];
-          arr[n - interval] = temp;
-          n = n - interval;
-        }
-      }
-      interval = parseInt(interval / 2);
-    }
-    // console.log(arr)
-    return arr;
-  },
-      aa(){
-        var arr=[45,1,32,21,56,87,43,12,34,45];
-        for(var i=0;i<arr.length;i++){
-          var n=i;
-          while(arr[n]>arr[n+1] && n>=0){
-            var temp=arr[n];
-            arr[n]=arr[n+1];
-            arr[n+1]=temp;
-            n--;
-
-          }
-        }
-        console.log(arr)
-      },
       getHospital(val,e){
         doctorList(e).then(response => {
           this.doctorOption = response.data
@@ -256,7 +243,22 @@
           // this.getList();
         }
       },
-
+      getSource(val,e){
+        if(val=='add'){
+          this.temp.source_id = e
+        }else if(val=='filter'){
+          this.listQuery.source_id= e;
+          // this.getList()
+        }
+      },
+      getDisease(val,e){
+        if(val=='add'){
+          this.temp.disease_id = e
+        }else if(val=='filter'){
+          this.listQuery.disease_id= e;
+          // this.getList()
+        }
+      },
       changeHref(val,e){
         if(val == 'add'){
           this.temp.patient_id= e
@@ -315,7 +317,8 @@
 
         outpatientCount(para).then(response => {
           this.total = response.data
-        })
+        });
+
       },
       getCount() {
         const para = Object.assign({}, this.listQuery);
@@ -332,6 +335,14 @@
         outpatientCount(para).then(response => {
           this.total = response.data
         })
+      },
+      getOutData(){
+        sourceList().then(response => {
+          this.sourceOption = response.data
+        });
+        diseaseList().then(response => {
+          this.diseaseOption = response.data
+        });
       },
       gethospitalName(){
         hospitalNameList().then(response => {
@@ -351,15 +362,19 @@
           patient_name:'',
           hospital_name:'',
           doctor_name:'',
-          source:'',
           type: '',
           // department:'',
           register_date:'',
-          result:''
+          result:'',
+          source_id:undefined,
+          source:'',
+          disease_id:undefined,
+          disease:''
         }
       },
       handleCreate() {
         this.resetTemp();
+        this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -373,6 +388,8 @@
             this.$delete(this.temp,'patient_name');
             this.$delete(this.temp,'hospital_name');
             this.$delete(this.temp,'doctor_name');
+            this.$delete(this.temp,'source');
+            this.$delete(this.temp,'disease');
             outpatientAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
@@ -386,6 +403,7 @@
         })
       },
       handleUpdate(row) {
+        this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;
@@ -400,6 +418,8 @@
             this.$delete(this.temp,'patient_name');
             this.$delete(this.temp,'hospital_name');
             this.$delete(this.temp,'doctor_name');
+            this.$delete(this.temp,'source');
+            this.$delete(this.temp,'disease');
             outpatientUpdate(this.temp.id,this.temp).then((res) => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, res.data);

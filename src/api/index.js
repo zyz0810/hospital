@@ -50,10 +50,17 @@ export function projectsMoney() {
     method: 'get'
   })
 }
-//  今日各项目营业额
+//  今日运营报表
 export function outPatients() {
   return request({
     url: '/api//report//today/hospitals/out-patients',
+    method: 'get'
+  })
+}
+//  今日各医生创收
+export function doctorsTurnover() {
+  return request({
+    url: '/api/report//today/doctors/turnover',
     method: 'get'
   })
 }

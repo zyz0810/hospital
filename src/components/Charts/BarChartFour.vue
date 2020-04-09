@@ -3,8 +3,8 @@
   <div class="" style="background: #fff;padding: 20px; margin-bottom: 20px;">
     <div class="legend_span legend_inline text-center" v-if="BarChartLegend.length>0">
       <div v-for="(item,index) in BarChartLegend" @click="editLegend">
-        <label :for="'barThree'+index">
-          <input type="checkbox" checked="checked" ref="pieCheckbox" :id="'barThree'+index" :value="item.name"/>
+        <label :for="inputName+index">
+          <input type="checkbox" checked="checked" ref="pieCheckbox" :id="inputName+index" :value="item.name"/>
           <span class="color_block" :style="{background:item.color}"></span>
           {{item.name}}
         </label>
@@ -53,6 +53,10 @@
         type: Array,
         required: true
       },
+      inputName:{
+        type: String,
+        default: 'barThree'
+      }
     },
     data() {
       return {
@@ -67,6 +71,12 @@
         }
       },
       divwidth: {
+        deep: true,
+        handler(val) {
+          this.setOptions(val)
+        }
+      },
+      inputName:{
         deep: true,
         handler(val) {
           this.setOptions(val)

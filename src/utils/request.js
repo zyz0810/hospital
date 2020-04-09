@@ -83,35 +83,35 @@ service.interceptors.response.use(
       })
       // })
     }
-    if (res.status === 2){
+    else if (res.status === 2){
       Message({
         message: '登录密码错误',
         type: 'error',
         duration: 5 * 1000
       })
     }
-    if (res.status === 3) {
+    else if (res.status === 3) {
       Message({
         message: '您没此权限',
         type: 'error',
         duration: 5 * 1000
       })
     }
-    if (res.status === 4) {
+    else if (res.status === 4) {
       Message({
         message: '该数据不存在',
         type: 'error',
         duration: 5 * 1000
       })
     }
-    if (res.status === 5){
+    else if (res.status === 5){
       Message({
         message: '该数据已存在',
         type: 'error',
         duration: 5 * 1000
       })
     }
-    if (res.status === 6) {
+    else if (res.status === 6) {
       // MessageBox.confirm('该数据有关联数据，不能删除', '提示', {
       //   confirmButtonText: '确定',
       //   showCancelButton:false,

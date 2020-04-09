@@ -17,12 +17,13 @@
 
 <script>
 
-  import { doctorsTurnover } from '@/api/performance'
+  import { consultantTurnover,doctorsTurnover,doctorsPayment } from '@/api/performance'
 import MChart from '@/components/Charts/MixChart'
 import MChartTwo from '@/components/Charts/MixChartTwo'
 import BarChartThree from '@/components/Charts/BarChartThree'
 const animationDuration = 2000;
-const colorList=['#00a9ff','#ffb840','#ff5a46','#00bd9f','#785fff']
+const colorList= ['#00a9ff','#ffb840','#ff5a46','#00bd9f','#785fff','#f28b8c','#eb7df5','#6a5195','#3bf209','#17400c','#3c789b','#62f421','#09e4f2','#f20955','#5d182f',
+    '#ec06b3','#7c0cab','#ae8d7f','#d07045','#ff061d','#107f6b','#a7a210','#f8f47c','#789808','#927009','#cb9b6f','#51845a','#54947b','#82d0dc','#37476c'];
 export default {
   name: 'MixChart',
   components: { MChart,MChartTwo,BarChartThree },
@@ -71,7 +72,11 @@ export default {
               color: '#666',//坐标值得具体的颜色
               fontSize:9
             }
-          }
+          },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
         },
         yAxis: {
           type: 'category',
@@ -89,6 +94,10 @@ export default {
               fontSize:9
             }
           },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
           data: []
         },
         series: []
@@ -99,7 +108,7 @@ export default {
         type:'bar'
       },{
         color:'#ffb840',
-        name:'转换人数',
+        name:'转换门诊人数',
         type:'line'
       }],
       mixChartData:{
@@ -132,7 +141,6 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-
         xAxis: {
           type: 'category',
           name:'咨询师      ',
@@ -149,10 +157,14 @@ export default {
               fontSize:9
             }
           },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
           axisTick: {
             alignWithLabel: true
           },
-          data: ['张咨询', '李咨询', '王咨询', '郑咨询', '周咨询', '陈咨询','黄咨询']
+          data: []
         },
         yAxis: {
           type: 'value',
@@ -173,6 +185,10 @@ export default {
           axisTick: {
             show: false
           },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
           boundaryGap: [0, 0.01]
         },
         series: [
@@ -187,7 +203,7 @@ export default {
             barWidth : '20%',
             barGap:'0',/*多个并排柱子设置柱子之间的间距*/
             barCategoryGap:'0',/*多个并排柱子设置柱子之间的间距*/
-            data: [100, 90, 160, 126, 130, 101,80],
+            data: [],
             animationDuration
           },
           {
@@ -204,7 +220,7 @@ export default {
               }
             },
 
-            data: [80, 50, 120, 100, 124, 80,50],
+            data: [],
             animationDuration
           }
         ]
@@ -212,19 +228,15 @@ export default {
       mixChartLegendTwo:[{
         type:'bar',
         color:colorList[0],
-        name:'创收',
-      },{
-        type:'bar',
-        color:colorList[1],
-        name:'接诊次数',
+        name:'接诊人数',
       },{
         type:'line',
-        color:colorList[2],
+        color:colorList[1],
         name:'转换率',
       }],
       mixChartDataTwo:{
         title: {
-          text: '当月咨询人数/转换人数',
+          text: '当月医生接诊/转换率',
           // subtext: '数据来自网络'
           textStyle:{
             color :'#666',
@@ -234,26 +246,15 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross',
-            crossStyle: {
-              color: '#999'
-            }
+            type: 'shadow'
           }
-        },
-        toolbox: {
-          // feature: {
-          //   dataView: {show: true, readOnly: false},
-          //   magicType: {show: true, type: ['line', 'bar']},
-          //   restore: {show: true},
-          //   saveAsImage: {show: true}
-          // }
         },
         legend: {
           orient: 'vertical',
           right: 0,
           top: 0,
           bottom: '10',
-          data: ['创收', '接诊次数', '转换率'],
+          data: ['接诊次数', '转换率'],
           show:false
         },
         grid: {
@@ -263,56 +264,85 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        xAxis: [
-          {
-            name:'医生',
+        xAxis: {
+            name:'',
             type: 'category',
-            data: ['张医生', '李医生', '丁医生', '郝医生', '沈医生','王医生'],
+            data: [],
             axisPointer: {
               type: 'shadow'
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '医生接诊次数',
-          },
-          {
-            type: 'value',
-            name: '医生创收总额',
-            axisLabel: {
-              formatter: '{value} 千元'
-            }
-          }
-        ],
-        series: [
-          {
-            name: '创收',
-            type: 'bar',
-            itemStyle:{
-              normal:{
-                color:'#00a9ff'
-              }
             },
-            barWidth : '20%',
-            barGap:'0',/*多个并排柱子设置柱子之间的间距*/
-            barCategoryGap:'0',/*多个并排柱子设置柱子之间的间距*/
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7],
-            animationDuration
+            splitLine:{
+              show:false     //去掉网格线
+            },
+            splitArea : {show : false},//保留网格区域
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#666',//左边线的颜色
+              width:'1'//坐标线的宽度
+            }
           },
+          axisLabel: {
+            textStyle: {
+              color: '#666',//坐标值得具体的颜色
+              fontSize:9
+            }
+          },
+          },
+        yAxis: [{
+          type: 'value',
+          name: '医生接诊人数',
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#666',//左边线的颜色
+              width:'1'//坐标线的宽度
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#666',//坐标值得具体的颜色
+              fontSize:9
+            }
+          },
+        },{
+          type: 'value',
+          name: '转换率(元/病人)',
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#666',//左边线的颜色
+              width:'1'//坐标线的宽度
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#666',//坐标值得具体的颜色
+              fontSize:9
+            }
+          },
+        }],
+        series: [
           {
             name: '接诊次数',
             type: 'bar',
             itemStyle:{
               normal:{
-                color:'#ffb840'
+                color:colorList[0]
               }
             },
             barWidth : '20%',
             barGap:'0',/*多个并排柱子设置柱子之间的间距*/
             barCategoryGap:'0',/*多个并排柱子设置柱子之间的间距*/
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7],
+            data: [],
             animationDuration
           },
           {
@@ -322,14 +352,14 @@ export default {
             symbolSize: 10,
             itemStyle:{
               normal:{
-                color:'#ff5a46',
+                color:colorList[1],
                 lineStyle: {
                   width:5
                 }
               }
             },
             yAxisIndex: 1,
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2],
+            data: [],
             animationDuration
           }
         ]
@@ -338,6 +368,8 @@ export default {
   },
   created() {
     this.getData();
+    this.getData2();
+    this.getDataCconsultant()
   },
   methods: {
     async getData() {
@@ -365,11 +397,28 @@ export default {
         legentList.push({name:data.series[i].name,color:colorList[i]});
       }
       this.BarChartThreeData.series = list;
-      this.BarChartLegend = legentList
+      this.BarChartLegend = legentList;
     },
 
+    getData2(){
+      doctorsPayment().then(response => {
+        this.mixChartDataTwo.xAxis.data=response.data.categories;
+        this.mixChartDataTwo.series[0].name=response.data.series[0].name;
+        this.mixChartDataTwo.series[1].name=response.data.series[1].name;
+        this.mixChartDataTwo.series[0].data=response.data.series[0].data;
+        this.mixChartDataTwo.series[1].data=response.data.series[1].data;
+      });
+    },
 
-
+    getDataCconsultant(){
+      consultantTurnover().then(response => {
+        this.mixChartData.xAxis.data=response.data.categories;
+        this.mixChartData.series[0].name=response.data.series[0].name;
+        this.mixChartData.series[1].name=response.data.series[1].name;
+        this.mixChartData.series[0].data=response.data.series[0].data;
+        this.mixChartData.series[1].data=response.data.series[1].data;
+      });
+    }
   }
 }
 </script>

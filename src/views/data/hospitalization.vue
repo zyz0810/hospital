@@ -39,7 +39,10 @@
     <el-table :key="tableKey" v-loading="listLoading" :data="list" stripe border fit highlight-current-row style="width: 100%;">
       <el-table-column label="病人" align="center">
         <template slot-scope="scope">
-          {{ scope.row.patient_name }}
+          <!--{{ scope.row.patient_name }}-->
+          <router-link :to="'/data/custorm/'+scope.row.patient_id" class="el-link el-link--primary is-underline patient_name">
+            {{ scope.row.patient_name }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="医院名称" align="center">
@@ -343,6 +346,7 @@
       },
       handleCreate() {
         this.resetTemp();
+        this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -369,6 +373,7 @@
       },
       handleUpdate(row) {
         this.updateId=row.id;
+        this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;

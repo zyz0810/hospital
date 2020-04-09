@@ -39,7 +39,7 @@
             <div class="card-panel-text">
               今日营收额
             </div>
-            <count-to :start-val="0" :end-val="todayTurnover" :duration="3200" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="todayTurnoverData" :duration="3200" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -76,9 +76,9 @@
         </div>
       </el-col>
     </el-row>
-    <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
-      <!--<BarChartThree :chart-data="BarChartTwoData" :BarChartLegend="[]" :height="'400px'" :divwidth="'100%'"/>-->
-    <!--</el-row>-->
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <BarChartThree :chart-data="BarChartTwoData" :BarChartLegend="[]" :height="'400px'" :divwidth="'100%'"/>
+    </el-row>
     <div style="font-size: 20px;margin-bottom: 15px;">今日运营报表</div>
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <BarChartThree :chart-data="BarChartThreeData" :BarChartLegend="BarChartLegend" :height="'500px'" :divwidth="'90%'"/>
@@ -91,7 +91,7 @@
   import PanelGroup from './components/PanelGroup'
   import PieChart from '@/components/Charts/PieChartTwo'
   import BarChartThree from '@/components/Charts/BarChartThree'
-  import { todayConsults,todayTurnover,todayProfit,todayOut,hospitalMoney,projectsMoney,outPatients } from '@/api/index'
+  import { todayConsults,todayTurnover,todayProfit,todayOut,hospitalMoney,projectsMoney,outPatients,doctorsTurnover } from '@/api/index'
 
 const lineChartData = {
   newVisitis: {
@@ -112,7 +112,8 @@ const lineChartData = {
   }
 };
 const animationDuration=2000;
-  const colorList=['#00a9ff','#ffb840','#ff5a46','#00bd9f','#785fff'];
+  const colorList= ['#00a9ff','#ffb840','#ff5a46','#00bd9f','#785fff','#f28b8c','#eb7df5','#6a5195','#3bf209','#17400c','#3c789b','#62f421','#09e4f2','#f20955','#5d182f',
+    '#ec06b3','#7c0cab','#ae8d7f','#d07045','#ff061d','#107f6b','#a7a210','#f8f47c','#789808','#927009','#cb9b6f','#51845a','#54947b','#82d0dc','#37476c'];
 export default {
   name: 'DashboardAdmin',
   components: {
@@ -124,7 +125,7 @@ export default {
   data() {
     return {
       todayConsults:0,
-      todayTurnover:0,
+      todayTurnoverData:0,
       todayProfit:0,
       todayOut:0,
       lineChartData: lineChartData.newVisitis,
@@ -142,7 +143,7 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          formatter: '{b} : {c} ({d}%)'
         },
         legend: {
         //   orient: 'vertical',
@@ -163,7 +164,6 @@ export default {
               normal: {
                 color:function(params) {
                   //自定义颜色
-                  var colorList = ['#00a9ff','#ffb840','#ff5a46','#00bd9f','#785fff','#f28b8c'];
                   return colorList[params.dataIndex]
                 },
                 label : {
@@ -229,7 +229,11 @@ export default {
               color: '#666',//坐标值得具体的颜色
               fontSize:9
             }
-          }
+          },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
         },
         yAxis: {
           type: 'category',
@@ -246,6 +250,10 @@ export default {
               fontSize:9
             }
           },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
           data: []
         },
         series: [
@@ -270,90 +278,97 @@ export default {
         ]
 
       },
-      // BarChartTwoData:{
-      //   title: {
-      //     text: '医生创收排行',
-      //     // subtext: '各医院营收排行',
-      //     left:'0',
-      //     top:'0',
-      //     textStyle:{
-      //       color :'#666',
-      //       fontSize :'14'
-      //     }
-      //
-      //   },
-      //   tooltip: {
-      //     trigger: 'axis',
-      //     axisPointer: {
-      //       type: 'shadow'
-      //     }
-      //   },
-      //   legend: {
-      //     data: ['门诊人数', '治疗人数']
-      //   },
-      //   grid: {
-      //     top: 30,
-      //     left: '2%',
-      //     right: '2%',
-      //     bottom: '3%',
-      //     containLabel: true
-      //   },
-      //   xAxis: {
-      //     type: 'value',
-      //     boundaryGap: [0, 0.01],
-      //     axisLine: {
-      //       lineStyle: {
-      //         type: 'solid',
-      //         color: '#666',//左边线的颜色
-      //         width:'1'//坐标线的宽度
-      //       }
-      //     },
-      //     axisLabel: {
-      //       textStyle: {
-      //         color: '#666',//坐标值得具体的颜色
-      //         fontSize:9
-      //       }
-      //     }
-      //   },
-      //   yAxis: {
-      //     type: 'category',
-      //     axisLine: {
-      //       lineStyle: {
-      //         type: 'solid',
-      //         color: '#666',//左边线的颜色
-      //         width:'1'//坐标线的宽度
-      //       }
-      //     },
-      //     axisLabel: {
-      //       textStyle: {
-      //         color: '#666',//坐标值得具体的颜色
-      //         fontSize:9
-      //       }
-      //     },
-      //     data: [ '其他','医院D', '医院C', '医院B', '医院A']
-      //   },
-      //   series: [
-      //     {
-      //       name: '2011年',
-      //       type: 'bar',
-      //       data: [4000, 6000, 7000, 5000, 3000],
-      //       itemStyle:{
-      //         normal:{
-      //           color:'#00a9ff',
-      //           label : {
-      //             show: true,
-      //             position: 'right',
-      //             color:'#999'
-      //           }
-      //         }
-      //       },
-      //       barWidth : 20,
-      //
-      //       animationDuration
-      //     },
-      //   ]
-      //
-      // },
+      BarChartTwoData:{
+        title: {
+          text: '医生营收排行',
+          // subtext: '各医院营收排行',
+          left:'0',
+          top:'0',
+          textStyle:{
+            color :'#666',
+            fontSize :'14'
+          }
+
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['门诊人数', '治疗人数']
+        },
+        grid: {
+          top: 30,
+          left: '2%',
+          right: '2%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#666',//左边线的颜色
+              width:'1'//坐标线的宽度
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#666',//坐标值得具体的颜色
+              fontSize:9
+            }
+          },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
+        },
+        yAxis: {
+          type: 'category',
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#666',//左边线的颜色
+              width:'1'//坐标线的宽度
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#666',//坐标值得具体的颜色
+              fontSize:9
+            }
+          },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
+          data: []
+        },
+        series:[
+          {
+            name: '2011年',
+            type: 'bar',
+            data: [],
+            itemStyle:{
+              normal:{
+                color:'#00a9ff',
+                label : {
+                  show: true,
+                  position: 'right',
+                  color:'#999'
+                }
+              }
+            },
+            barWidth : 20,
+            animationDuration
+          },
+        ]
+
+      },
       BarChartThreeData:{
         title: {
           text: '门诊/治疗人数',
@@ -395,7 +410,11 @@ export default {
               color: '#666',//坐标值得具体的颜色
               fontSize:9
             }
-          }
+          },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
         },
         yAxis: {
           type: 'category',
@@ -412,6 +431,10 @@ export default {
               fontSize:9
             }
           },
+          splitLine:{
+            show:false     //去掉网格线
+          },
+          splitArea : {show : false},//保留网格区域
           data: []
         },
         series: [
@@ -456,20 +479,32 @@ export default {
        this.todayConsults = response.data
      });
      todayTurnover().then(response => {
-       this.todayTurnover = response.data
+       if(response.data){
+         this.todayTurnoverData = response.data
+       }else{
+         this.todayTurnoverData = 0
+       }
      });
      todayProfit().then(response => {
-       this.todayProfit = response.data
+       if(response.data){
+         this.todayProfit = response.data
+       }else{
+         this.todayProfit = 0
+       }
      });
      todayOut().then(response => {
        this.todayOut = response.data
      });
      hospitalMoney().then(response => {
-       console.log(response)
        this.BarChartOneData.yAxis.data = response.data.categories;
        this.BarChartOneData.series[0].name = response.data.series[0].name;
        this.BarChartOneData.series[0].data = response.data.series[0].data;
 
+     });
+     doctorsTurnover().then(response => {
+       this.BarChartTwoData.yAxis.data = response.data.categories;
+       this.BarChartTwoData.series[0].name = response.data.series[0].name;
+       this.BarChartTwoData.series[0].data = response.data.series[0].data;
      });
      outPatients().then(response => {
        this.BarChartThreeData.yAxis.data = response.data.categories;

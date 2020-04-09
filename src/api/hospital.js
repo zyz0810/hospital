@@ -143,3 +143,33 @@ export function projectsNameList(hospital_id) {
     // params: query
   })
 }
+
+//  半年每月的各医院营收报表
+//  params hospital_id:医院id
+export function hospitalTurnover(query) {
+  return request({
+    url: '/api/report/hospital/turnover/half-year/month',
+    method: 'get',
+    params: query
+  })
+}
+
+//  半年每月的各医院门诊数报表
+//  params  hospital_id:医院id
+export function hospitalOut(query) {
+  return request({
+    url: '/api/report/hospital/outpatients/half-year/month',
+    method: 'get',
+    params: query
+  })
+}
+
+//  当月各医院的医生平均创收报表
+//  params  hospital_id:医院id
+export function doctorTurnover(query) {
+  return request({
+    url: '/api/report/hospital/doctor/current/month/turnover/overall',
+    method: 'get',
+    params: query
+  })
+}

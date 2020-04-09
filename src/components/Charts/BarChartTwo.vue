@@ -95,7 +95,7 @@
     },
     methods: {
       initChart() {
-        this.chart = echarts.init(this.$refs.barChart, 'macarons')
+        this.chart = echarts.init(this.$refs.barChart, 'macarons');
         this.setOptions(this.chartData)
       },
       setOptions({title,tooltip,legend,grid,xAxis,yAxis,series } = {}) {
@@ -107,17 +107,15 @@
           xAxis: xAxis,
           yAxis: yAxis,
           series: series
-    })
+        })
       },
       editLegend(){
-
         var selectOption = {};
         var options = this.chartData;
         this.$refs.pieCheckbox.forEach(function (c) {
           c.checked?selectOption[c.value]=true:selectOption[c.value]=false;
         });
         options.legend.selected = selectOption;
-        console.log(options.legend)
         this.setOptions(options);
       }
     }

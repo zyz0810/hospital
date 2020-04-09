@@ -179,7 +179,7 @@
         dialogFormVisible: false,
         dialogStatus: '',
         rules: {
-          doctor_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect }],
+          doctor_name: [{ required: true, message: '请输入医生姓名', trigger: 'change',validator: isSelect }],
           hospital_name: [{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect}],
           project_name:[{ required: true, message: '请选择项目名称', trigger: 'change',validator: isSelect }],
           month:[{ required: true, message: '请选择缴费日期', trigger: 'change',validator: isSelect }],
