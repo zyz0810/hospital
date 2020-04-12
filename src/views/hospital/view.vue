@@ -336,8 +336,6 @@ export default {
       })
     },
     handleUpdate(name,row) {
-      console.log( this.updateId)
-      console.log(row)
       if(name == 'project'){
         this.updateId = row.hospital_id
         this.projectId = row.id
@@ -425,10 +423,7 @@ export default {
     },
     hospitalEdit(){
       // this.updateId = row.id
-      console.log('检查获取的数据')
-      console.log(this.formInline)
       this.hospitalTemp = Object.assign({}, this.formInline) // copy obj
-      console.log(this.hospitalTemp)
       // this.dialogStatus = 'update'
       this.dialogHospitalVisible = true
       this.$nextTick(() => {
@@ -439,8 +434,6 @@ export default {
       var id = this.$route.params && this.$route.params.id;
       this.$refs['dataHospital'].validate((valid) => {
         if (valid) {
-          console.log('请求接口')
-          console.log(this.hospitalTemp)
           hospitalUpdate(id,this.hospitalTemp).then((res) => {
             this.formInline = res.data
             this.$refs['dataHospital'].clearValidate()

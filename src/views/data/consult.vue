@@ -125,7 +125,7 @@
         if (value == 0) { //如果值是 0，提示用户选择正确的选项
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
         }
@@ -193,7 +193,6 @@
             // this.patientOption.push({id:'go',name:'没有找到，点击新增病人'});
           })
         } else {
-          console.log('没参数')
           nameSearch({prefix:''}).then((res) => {
             this.loading = false;
             this.patientOption = res.data
@@ -282,7 +281,6 @@
           if (valid) {
             this.$delete(this.temp,'patient_name');
             this.$delete(this.temp,'consultant_name');
-            console.log(this.temp)
             consultsAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;

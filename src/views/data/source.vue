@@ -27,7 +27,7 @@
 
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.page_size" @pagination="getList" class="text-right"/>-->
 
-    <el-dialog :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="名称" prop="name">
           <el-input v-model="temp.name" placeholder="请输入名称" />
@@ -65,7 +65,7 @@
 
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
           // return callback(new Error("请选择一级标题"));
@@ -77,6 +77,10 @@
         listLoading: true,
         temp: {
          name:''
+        },
+        textMap: {
+          update: '编辑门诊来源信息',
+          create: '新增门诊来源信息'
         },
         dialogFormVisible: false,
         dialogStatus: '',

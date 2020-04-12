@@ -1,5 +1,5 @@
 module.exports = {
-  title: '医院管理后台',
+  title: '铂桐管理后台',
 
   /**
    * @type {boolean} true | false

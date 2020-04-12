@@ -121,14 +121,12 @@ export default {
       })
     },
     editLegend(){
-console.log('1111')
       var selectOption = {};
       var options = this.chartData;
       this.$refs.pieCheckbox.forEach(function (c) {
         c.checked?selectOption[c.value]=true:selectOption[c.value]=false;
       });
       options.legend.selected = selectOption;
-      console.log(options)
       this.setOptions(options);
     }
 

@@ -82,7 +82,6 @@ export default {
     height: {
       deep: true,
       handler(val) {
-        console.log('盖度：'+val)
         this.setOptions(val)
       }
     },
@@ -94,7 +93,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.PieChartLegend)
     this.$nextTick(() => {
       this.initChart()
     })

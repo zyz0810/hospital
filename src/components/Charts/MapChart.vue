@@ -39,7 +39,6 @@
         deep: true,
         handler(val) {
           this.setOptions(val)
-          console.log(val)
         }
       },
     },

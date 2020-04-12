@@ -113,7 +113,7 @@
 
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
           // return callback(new Error("请选择一级标题"));
@@ -182,7 +182,6 @@
             // this.patientOption.push({id:'go',name:'没有找到，点击新增病人'});
           })
         } else {
-          console.log('没参数')
           nameSearch({prefix:''}).then((res) => {
             this.loading = false;
             this.patientOption = res.data

@@ -38,7 +38,7 @@
           <el-input v-model="temp.name" placeholder="请输入姓名" autocomplete="off" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off" @input="handelKeyup"/>
+          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off"/>
         </el-form-item>
         <el-form-item label="权限" prop="permissions">
           <!--<el-input v-model="temp.userAgent" placeholder="请选择" autocomplete="off" />-->
@@ -95,14 +95,6 @@
       this.getList()
     },
     methods: {
-      // changePerssion(e){
-      //   console.log(e)
-      //   console.log(this.temp.permissions)
-      //   // this.$set(this.temp,'permissions',e)
-      // },
-      handelKeyup(e){
-        console.log('鼠标输')
-      },
       async getList() {
         const { data } = await accountsList();
         this.listLoading = true;
@@ -135,12 +127,9 @@
         })
       },
       createData() {
-        // console.log(this.perssionsSelectedList)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             // this.temp.permissions = this.perssionsSelectedList;
-            console.log(this.temp)
-            console.log('新建')
             accountAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
@@ -153,15 +142,12 @@
         })
       },
       handleUpdate(row) {
-        // this.temp = Object.assign({}, row); // copy obj
-        console.log(this.temp)
         this.dialogStatus = 'update';
         this.temp.id = row.id;
         this.temp.name = row.name;
         this.temp.password = '123456';
         this.temp.username = row.username;
         this.temp.permissions=row.permissions;
-        console.log(this.temp)
         this.dialogFormVisible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()

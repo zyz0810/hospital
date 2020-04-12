@@ -125,7 +125,6 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             // this.$delete(this.temp,'id')
-            console.log(this.temp);
             const tempData = Object.assign({}, this.temp);
             visitorsUpdate(this.temp.id,tempData).then((res) => {
               const index = this.list.findIndex(v => v.id === this.temp.id);

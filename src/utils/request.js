@@ -25,14 +25,11 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       // config.headers['X-Token'] = getToken()
-      // console.log('发送')
-      // console.log(store.getters.token)
     }
     return config
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )

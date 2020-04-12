@@ -117,7 +117,6 @@
         this.$confirm('确定删除此条记录吗?', '提示', {
           type: 'warning'
         }).then(() => {
-          console.log('dianji')
           this.listLoading = true;
           //NProgress.start();
           // let para = { id: row.id };
@@ -128,7 +127,6 @@
           //     message: '删除成功',
           //     type: 'success'
           //   });
-          console.log('dianji')
           this.fetchData();
           // });
         }).catch(() => {

@@ -123,7 +123,7 @@
         if (value == 0) { //如果值是 0，提示用户选择正确的选项
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
         }

@@ -41,7 +41,6 @@ export default {
   },
   watch: {
     routes() {
-      console.log('路由')
       this.searchPool = this.generateRoutes(this.routes)
     },
     searchPool(list) {
@@ -56,7 +55,6 @@ export default {
     }
   },
   mounted() {
-    console.log('路由2')
     this.searchPool = this.generateRoutes(this.routes)
   },
   methods: {
@@ -100,10 +98,6 @@ export default {
     // And generate the internationalized title
     generateRoutes(routes, basePath = '/', prefixTitle = []) {
       let res = []
-
-      console.log('执行11')
-      console.log(routes)
-      console.log('执行22')
       for (const router of routes) {
         // skip hidden router
         if (router.hidden) { continue }

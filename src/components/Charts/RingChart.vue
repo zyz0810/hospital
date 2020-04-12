@@ -93,7 +93,6 @@ export default {
       })
     },
     editLegend(){
-      console.log(options)
       var selectOption = {};
       var options = this.chartData;
       this.$refs.pieCheckbox.forEach(function (c) {

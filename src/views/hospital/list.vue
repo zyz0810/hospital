@@ -32,14 +32,13 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp">
-        <el-form-item label="医院名称" :label-width="formLabelWidth">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="医院名称" prop="name">
           <el-input v-model="temp.name" placeholder="请输入医院名称" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="地址" :label-width="formLabelWidth">
+        <el-form-item label="地址" prop="address">
           <el-input v-model="temp.address" placeholder="请输入地址" autocomplete="off" />
         </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -81,10 +80,8 @@ export default {
       },
       dialogStatus: '',
       rules: {
-        name: [{ required: true, message: 'type is required', trigger: 'change' }],
-        address: [{ required: true, message: 'title is required', trigger: 'change' }]
+        name: [{ required: true, message: '请输入医院名称', trigger: 'change' }],
       },
-      formLabelWidth: '120px'
     }
   },
   created() {
@@ -93,7 +90,6 @@ export default {
   methods: {
     async fetchData() {
       this.listLoading = true
-      console.log(await hospitalList())
       const { data } = await hospitalList()
       this.list = data
       this.listLoading = false
@@ -138,14 +134,6 @@ export default {
         address:''
       }
     },
-    // handleAdd() {
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = false
-    //   console.log('发送post请求')
-    //   hospitalAdd(this.temp).then(response => {
-    //     console.log('发送post请求成功')
-    //   })
-    // },
 
     handleAdd() {
       this.resetTemp()
@@ -159,8 +147,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           hospitalAdd(this.temp).then((res) => {
-            console.log('返回字段')
-            console.log(res)
             this.list.unshift(res.data)
             this.dialogFormVisible = false
             this.$notify({
@@ -175,8 +161,6 @@ export default {
     },
 
     handleUpdate(row) {
-      console.log(row)
-      console.log(row.id)
       this.updateId = row.id
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)

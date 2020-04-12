@@ -142,7 +142,7 @@
 
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
           // return callback(new Error("请选择一级标题"));
@@ -211,8 +211,6 @@
         }else if(val == 'filter'){
           this.listQuery.project_id= e
         }
-        // var aa = this.$delete(this.temp,'patient_name')
-        // console.log(aa)
       },
 
       getList() {

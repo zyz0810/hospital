@@ -503,7 +503,7 @@
         if (value == 0) { //如果值是 0，提示用户选择正确的选项
           return callback(new Error("请正确选择一级标题"));
         } else if(value == undefined){
-          console.log('没选')
+
         }else {
           callback();
         }
@@ -722,8 +722,6 @@
         }else if(val == 'filter'){
           this.listQuery.project_id= e
         }
-        // var aa = this.$delete(this.temp,'patient_name')
-        // console.log(aa)
       },
       getSource(val,e){
         if(val=='add'){
