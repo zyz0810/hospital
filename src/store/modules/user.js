@@ -38,12 +38,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response;
-
         commit('SET_TOKEN', data.token);
         commit('SET_ID', response.data.id);
-        commit('SET_NAME', response.data.username);
+        commit('SET_NAME', response.data.name);
         setId(response.data.id);
-        setName(response.data.username);
+        setName(response.data.name);
         setToken(data.token);
         resolve()
       }).catch(error => {

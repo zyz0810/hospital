@@ -63,7 +63,7 @@ export default {
     return {
       headImg: headImg,
       systemDate:'',
-      name:getName()
+      name:getName()!='null'?getName():''
     }
   },
   components: {
