@@ -25,6 +25,26 @@
       </el-table-column>
     </el-table>
 
+
+<!--    二级列表-->
+    <el-table :key="levelkey" v-loading="levelListLoading" :data="levelList" stripe border fit highlight-current-row style="width: 100%;">
+      <el-table-column label="名称" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="{row,$index}">
+          <el-button type="primary" icon="el-icon-edit" @click="handleUpdate(row)">
+            编辑
+          </el-button>
+          <el-button icon="el-icon-delete" type="danger" @click="handleDelete(row,$index)">
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.page_size" @pagination="getList" class="text-right"/>-->
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -46,7 +66,7 @@
 </template>
 
 <script>
-  import { diseaseList,diseaseAdd,diseaseUpdate,diseaseDel } from '@/api/disease'
+  import { diseaseList,diseaseAdd,diseaseUpdate,diseaseDel,levelDiseaseList,levelDiseaseAdd,levelDiseaseUpdate,levelDiseaseDel } from '@/api/disease'
   import { hospitalNameList,doctorList,projectsNameList } from '@/api/hospital'
   import { nameSearch } from '@/api/patient'
   import waves from '@/directive/waves' // waves directive
@@ -72,8 +92,11 @@
       };
       return {
         tableKey: 0,
+        levelkey:0,
         list: null,
+        levelList:null,
         total: 0,
+        levelListLoading: true,
         listLoading: true,
         temp: {
           name:''
@@ -93,6 +116,7 @@
     },
     created() {
       this.getList();
+      this.getLevelList();
     },
     methods: {
       getList() {
@@ -101,6 +125,14 @@
           this.list = response.data;
           // this.total = response.data.total
           this.listLoading = false
+        });
+      },
+      getLevelList() {
+        this.listLoading = true;
+        levelDiseaseList().then(response => {
+          this.levelList = response.data;
+          // this.total = response.data.total
+          this.levelListLoading = false
         });
       },
       resetTemp() {

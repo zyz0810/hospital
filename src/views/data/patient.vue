@@ -174,7 +174,7 @@
         },
         rules: {
           name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-          phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}],
+          // phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}],
           // idnum:[{ required: true, message: '身份证号不能为空', trigger: 'blur' },{validator:validateIdNo}],
           province:[{ required: true, message: '请选择所在省份', trigger: 'blur'},{validator: isSelect  }],
         },

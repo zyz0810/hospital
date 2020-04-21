@@ -88,7 +88,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.page_size" @pagination="getList" class="text-right"/>
 
     <el-dialog :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="width: 600px; margin-left:50px;">
         <el-form-item label="病人" prop="patient_name">
           <el-select v-model="temp.patient_name" filterable remote reserve-keyword placeholder="请输入姓名搜索" :remote-method="remoteMethod" :loading="loading" @change="changeHref('add',$event)">
             <el-option v-for="item in patientOption" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -114,6 +114,10 @@
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
           <el-select v-model="temp.disease" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">
             <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+          <!--二级病种-->
+          <el-select v-model="temp.levelDisease" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel('add',$event)">
+            <el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="挂号类型" prop="type">
@@ -207,6 +211,7 @@
           disease:''
         },
         diseaseOption:[],
+        levelDiseaseOption:[],
         sourceOption:[],
         dialogFormVisible: false,
         dialogStatus: '',
@@ -228,6 +233,7 @@
     },
 
     methods: {
+
       getHospital(val,e){
         doctorList(e).then(response => {
           this.doctorOption = response.data
@@ -252,6 +258,17 @@
         }
       },
       getDisease(val,e){
+        if(val=='add'){
+          this.temp.disease_id = e
+          // 获取二级病种
+          this.temp.levelDisease='';
+          this.levelDiseaseOption =  this.diseaseOption.find(item => item.key == e).list
+        }else if(val=='filter'){
+          this.listQuery.disease_id= e;
+          // this.getList()
+        }
+      },
+      getDiseaseLevel(val,e){
         if(val=='add'){
           this.temp.disease_id = e
         }else if(val=='filter'){
@@ -457,3 +474,8 @@
     }
   }
 </script>
+<style scoped>
+  .el-input{
+    width: 200px;
+  }
+</style>
