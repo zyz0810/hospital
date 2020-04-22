@@ -1,12 +1,11 @@
 <template>
   <div class="app-container">
+    <div class="title">一级列表</div>
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate('one')">
         新增
       </el-button>
-
     </div>
-
     <el-table :key="tableKey" v-loading="listLoading" :data="list" stripe border fit highlight-current-row style="width: 100%;">
       <el-table-column label="名称" align="center">
         <template slot-scope="scope">
@@ -27,10 +26,21 @@
 
 
 <!--    二级列表-->
-    <el-table :key="levelkey" v-loading="levelListLoading" :data="levelList" stripe border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="名称" align="center">
+    <div class="title">二级列表</div>
+    <div class="filter-container">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate('two')">
+        新增
+      </el-button>
+    </div>
+    <el-table :key="levelKey" v-loading="levelListLoading" :data="levelList" stripe border fit highlight-current-row style="width: 100%; margin-top: 20px;">
+      <el-table-column label="一级名称" align="center">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.first_level_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="二级名称" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.second_level_name }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -49,6 +59,11 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="名称" prop="first_level" v-if="createLevel == 'two' || updateLevel == 'two'">
+          <el-select v-model="temp.first_level" class="filter-item" placeholder="请选择一级病种" @change="changeDisease('filter',$event)">
+            <el-option v-for="item in list" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="temp.name" placeholder="请输入病种名称" />
         </el-form-item>
@@ -92,13 +107,15 @@
       };
       return {
         tableKey: 0,
-        levelkey:0,
+        levelKey:1,
         list: null,
         levelList:null,
         total: 0,
         levelListLoading: true,
         listLoading: true,
         temp: {
+          first_level:'',
+          first_level_id:undefined,
           name:''
         },
         textMap: {
@@ -111,7 +128,10 @@
           name:[{ required: true, message: '请输入病种名称', trigger: 'change' }],
         },
         loading: false,
-        updateId:undefined
+        updateId:undefined,
+        createLevel:'',
+        updateLevel:'',
+        deleteLevel:''
       }
     },
     created() {
@@ -119,6 +139,9 @@
       this.getLevelList();
     },
     methods: {
+      changeDisease(val,e){
+        this.temp.first_level_id = e;
+      },
       getList() {
         this.listLoading = true;
         diseaseList().then(response => {
@@ -137,13 +160,16 @@
       },
       resetTemp() {
         this.temp = {
+          first_level:'',
+          first_level_id:undefined,
           name:''
         }
       },
-      handleCreate() {
+      handleCreate(name) {
         this.resetTemp();
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
+        this.createLevel = name;
+        this.dialogStatus = 'create';
+        this.dialogFormVisible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -151,14 +177,32 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            diseaseAdd(this.temp).then((res) => {
-              this.list.unshift(res.data);
-              this.dialogFormVisible = false;
-              this.$message({
-                message: '增加成功',
-                type: 'success'
-              });
-            })
+            if(this.createLevel == 'one'){
+              let params = Object.assign({},this.temp);
+              this.$delete(params,'first_level_id');
+              this.$delete(params,'first_level');
+              diseaseAdd(params).then((res) => {
+                this.list.unshift(res.data);
+                this.dialogFormVisible = false;
+                this.$message({
+                  message: '增加成功',
+                  type: 'success'
+                });
+              })
+            }else if(this.createLevel=='two'){
+              let params = Object.assign({},this.temp);
+              this.$delete(params,'first_level');
+              console.log(params)
+              // levelDiseaseAdd(params).then((res) => {
+              //   this.levelList.unshift(res.data);
+              //   this.dialogFormVisible = false;
+              //   this.$message({
+              //     message: '增加成功',
+              //     type: 'success'
+              //   });
+              // })
+            }
+
           }
         })
       },
@@ -212,3 +256,9 @@
     }
   }
 </script>
+<style scoped>
+  .title{
+    font-weight: bold;
+    padding: 20px 20px 0 20px;
+  }
+</style>

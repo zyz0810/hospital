@@ -4,7 +4,7 @@ import request from '@/utils/request'
 //  门诊病种一级列表
 export function diseaseList(query) {
   return request({
-    url: '/api/outpatients/disease',
+    url: '/api/outpatients/disease/level/first',
     method: 'get',
     params: query
   })
@@ -14,7 +14,7 @@ export function diseaseList(query) {
 //  门诊一级病种数据新增
 export function diseaseAdd(data) {
   return request({
-    url: '/api/outpatients/disease',
+    url: '/api/outpatients/disease/level/first',
     method: 'post',
     data
   })
@@ -23,7 +23,7 @@ export function diseaseAdd(data) {
 //  修改门诊一级病种信息
 export function diseaseUpdate(disease_id, data) {
   return request({
-    url: `/api/outpatients/disease/${disease_id}`,
+    url: `/api/outpatients/disease/level/first/${disease_id}`,
     method: 'put',
     data
   })
@@ -32,7 +32,7 @@ export function diseaseUpdate(disease_id, data) {
 //  删除门诊一级病种信息
 export function diseaseDel(disease_id) {
   return request({
-    url: `/api/outpatients/disease/${disease_id}`,
+    url: `/api/outpatients/disease/level/first/${disease_id}`,
     method: 'DELETE',
   })
 }
