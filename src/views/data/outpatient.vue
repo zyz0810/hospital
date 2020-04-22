@@ -47,9 +47,14 @@
           {{ scope.row.hospital_name }}
         </template>
       </el-table-column>
-      <el-table-column label="病种" align="center">
+      <el-table-column label="一级病种" align="center">
         <template slot-scope="scope">
-          {{ scope.row.disease }}
+          {{ scope.row.disease_first_level_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="二级病种" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.disease_second_level_name }}
         </template>
       </el-table-column>
       <el-table-column label="门诊日期" align="center">
@@ -116,8 +121,8 @@
             <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
           <!--二级病种-->
-          <el-select v-model="temp.levelDisease" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel('add',$event)">
-            <el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />
+          <el-select v-model="temp.second_level_id" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel('add',$event)">
+            <el-option v-for="item in levelDiseaseOption" :key="item.second_level_id" :label="item.second_level_name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="挂号类型" prop="type">
@@ -152,7 +157,7 @@
 <script>
   import { outpatientList,outpatientAdd,outpatientUpdate,outpatientDel,outpatientCount } from '@/api/outpatient'
   import { sourceList } from '@/api/source'
-  import { diseaseList } from '@/api/disease'
+  import { diseaseList,levelDiseaseList } from '@/api/disease'
   import { hospitalNameList,doctorList } from '@/api/hospital'
   import { nameSearch } from '@/api/patient'
   import waves from '@/directive/waves' // waves directive
@@ -179,6 +184,7 @@
         list: null,
         total: 0,
         listLoading: true,
+        levelDiseaseOption:[],
         listQuery: {
           page: 1,
           page_size:10,
@@ -211,7 +217,7 @@
           disease:''
         },
         diseaseOption:[],
-        levelDiseaseOption:[],
+        levelDisease:[],
         sourceOption:[],
         dialogFormVisible: false,
         dialogStatus: '',
@@ -262,7 +268,21 @@
           this.temp.disease_id = e
           // 获取二级病种
           this.temp.levelDisease='';
-          this.levelDiseaseOption =  this.diseaseOption.find(item => item.key == e).list
+          // this.levelDiseaseOption =  this.levelDisease.find(item => {
+          //   console.log(item.first_level_id)
+          //   item.first_level_id == e
+          // })
+
+          let DiseaseOption =[];
+          this.levelDisease.map(item => {
+            console.log(item.first_level_id);
+            if(item.first_level_id == e){
+              DiseaseOption.push(item)
+            }
+          });
+          this.levelDiseaseOption = DiseaseOption
+
+
         }else if(val=='filter'){
           this.listQuery.disease_id= e;
           // this.getList()
@@ -358,6 +378,9 @@
         });
         diseaseList().then(response => {
           this.diseaseOption = response.data
+        });
+        levelDiseaseList().then(response => {
+          this.levelDisease = response.data
         });
       },
       gethospitalName(){
