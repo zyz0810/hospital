@@ -71,4 +71,11 @@ export function levelDiseaseDel(disease_id) {
     method: 'DELETE',
   })
 }
-
+// /outpatients/disease/level/first/{id}/second/names
+//  门诊病种二级列表
+export function getSecondDisease(disease_id) {
+  return request({
+    url: `/api/outpatients/disease/level/first/${disease_id}/second/names`,
+    method: 'get',
+  })
+}
