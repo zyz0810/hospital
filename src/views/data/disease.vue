@@ -78,8 +78,6 @@
       </div>
     </el-dialog>
 
-
-
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogLevelVisible">
       <el-form ref="levelForm" :rules="rules" :model="updateLevelTemp" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="名称" prop="first_level_name">
@@ -87,7 +85,7 @@
             <el-option v-for="item in list" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="名称11" prop="second_level_name">
+        <el-form-item label="名称" prop="second_level_name">
           <el-input v-model="updateLevelTemp.second_level_name" placeholder="请输入病种名称" />
         </el-form-item>
       </el-form>
@@ -201,6 +199,7 @@
       handleCreate(name) {
         this.resetTemp();
         this.createLevel = name;
+        this.updateLevel = 'one';
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -240,6 +239,7 @@
       },
       handleUpdate(row,name) {
         this.updateId = row.id;
+        this.createLevel = 'one';
         this.updateLevel = name;
         if(name=='one'){
           this.temp = Object.assign({}, row); // copy obj
