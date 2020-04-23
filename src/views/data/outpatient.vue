@@ -271,9 +271,7 @@
       },
       getDisease(val,e){
         if(val=='add'){
-          console.log(e)
-          console.log(this.temp.disease_first_level_name)
-          this.temp.disease_first_level_id = e
+          this.temp.disease_first_level_id = e;
           // 获取二级病种
           this.temp.disease_second_level_id=undefined;
           this.temp.disease_second_level_name='';
@@ -283,20 +281,9 @@
           //   item.first_level_id == e
           // })
 
-          // let DiseaseOption =[];
-          // this.levelDisease.map(item => {
-          //   console.log(item.first_level_id);
-          //   if(item.first_level_id == e){
-          //     DiseaseOption.push(item)
-          //   }
-          // });
-          // this.levelDiseaseOption = DiseaseOption
-
-
           getSecondDisease(e).then(response => {
             this.levelDiseaseOption = response.data
           });
-
 
         }else if(val=='filter'){
           this.listQuery.disease_id= e;
@@ -479,8 +466,9 @@
             this.$delete(tempData,'disease_first_level_name');
             this.$delete(tempData,'disease_second_level_name');
             outpatientUpdate(this.temp.id,tempData).then((res) => {
-              const index = this.list.findIndex(v => v.id === this.temp.id);
-              this.list.splice(index, 1, res.data);
+              // const index = this.list.findIndex(v => v.id === this.temp.id);
+              // this.list.splice(index, 1, res.data);
+              this.getList();
               this.dialogFormVisible = false;
               this.$message({
                 message: '修改成功',
