@@ -527,12 +527,12 @@ export  const asyncRoutes=[
         name: '门诊来源',
         meta: { title: '门诊来源' }
       },
-      {
-        path: 'disease',
-        component: () => import('@/views/data/disease'),
-        name: '门诊病种',
-        meta: { title: '门诊病种' }
-      }
+      // {
+      //   path: 'disease',
+      //   component: () => import('@/views/data/disease'),
+      //   name: '门诊病种',
+      //   meta: { title: '门诊病种' }
+      // }
     ]
   },
   {

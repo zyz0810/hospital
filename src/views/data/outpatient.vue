@@ -47,16 +47,16 @@
           {{ scope.row.hospital_name }}
         </template>
       </el-table-column>
-      <el-table-column label="一级病种" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.disease_first_level_name }}
-        </template>
-      </el-table-column>
-      <el-table-column label="二级病种" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.disease_second_level_name }}
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="一级病种" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.disease_first_level_name }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column label="二级病种" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.disease_second_level_name }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="门诊日期" align="center">
         <template slot-scope="scope">
           {{ scope.row.register_date }}
@@ -115,19 +115,19 @@
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="病种" prop="disease_first_level_name">
-          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
-          <el-select v-model="temp.disease_first_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">
-            <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="病种" prop="disease_first_level_name">-->
+          <!--&lt;!&ndash;<el-input v-model="temp.source" placeholder="请填写来源"/>&ndash;&gt;-->
+          <!--<el-select v-model="temp.disease_first_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">-->
+            <!--<el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
 
-        <el-form-item label="" prop="disease_second_level_name">
-          <!--二级病种-->
-          <el-select v-model="temp.disease_second_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel($event)">
-            <el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="" prop="disease_second_level_name">-->
+          <!--&lt;!&ndash;二级病种&ndash;&gt;-->
+          <!--<el-select v-model="temp.disease_second_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel($event)">-->
+            <!--<el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
 
         <el-form-item label="挂号类型" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="请选择挂号类型">
@@ -217,10 +217,10 @@
           result:'',
           source_id:undefined,
           source:'',
-          disease_first_level_id:undefined,
-          disease_first_level_name:'',
-          disease_second_level_id:undefined,
-          disease_second_level_name:'',
+          // disease_first_level_id:undefined,
+          // disease_first_level_name:'',
+          // disease_second_level_id:undefined,
+          // disease_second_level_name:'',
         },
         diseaseOption:[],
         levelDisease:[],
@@ -373,9 +373,9 @@
         sourceList().then(response => {
           this.sourceOption = response.data
         });
-        diseaseList().then(response => {
-          this.diseaseOption = response.data
-        });
+        // diseaseList().then(response => {
+        //   this.diseaseOption = response.data
+        // });
         levelDiseaseList().then(response => {
           this.levelDisease = response.data
         });
@@ -404,14 +404,15 @@
           result:'',
           source_id:undefined,
           source:'',
-          disease_first_level_id:undefined,
-          disease_first_level_name:'',
-          disease_second_level_id:undefined,
-          disease_second_level_name:'',
+          // disease_first_level_id:undefined,
+          // disease_first_level_name:'',
+          // disease_second_level_id:undefined,
+          // disease_second_level_name:'',
         }
       },
       handleCreate() {
         this.resetTemp();
+        this.doctorOption = [];
         this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
@@ -428,8 +429,8 @@
             this.$delete(param,'hospital_name');
             this.$delete(param,'doctor_name');
             this.$delete(param,'source');
-            this.$delete(param,'disease_first_level_name');
-            this.$delete(param,'disease_second_level_name');
+            // this.$delete(param,'disease_first_level_name');
+            // this.$delete(param,'disease_second_level_name');
             console.log(param)
             outpatientAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
@@ -446,6 +447,10 @@
       handleUpdate(row) {
         this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
+        // console.log(row)
+        doctorList(row.hospital_id).then(response => {
+          this.doctorOption = response.data
+        });
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -463,8 +468,8 @@
             this.$delete(tempData,'hospital_name');
             this.$delete(tempData,'doctor_name');
             this.$delete(tempData,'source');
-            this.$delete(tempData,'disease_first_level_name');
-            this.$delete(tempData,'disease_second_level_name');
+            // this.$delete(tempData,'disease_first_level_name');
+            // this.$delete(tempData,'disease_second_level_name');
             outpatientUpdate(this.temp.id,tempData).then((res) => {
               // const index = this.list.findIndex(v => v.id === this.temp.id);
               // this.list.splice(index, 1, res.data);

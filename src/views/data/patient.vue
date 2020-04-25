@@ -505,8 +505,6 @@
 
               "淮安",
 
-              "宿州",
-
               "其他"
 
             ]
@@ -1394,7 +1392,7 @@
           name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
           // phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}],
           // idnum:[{ required: true, message: '身份证号不能为空', trigger: 'blur' },{validator:validateIdNo}],
-          province:[{ required: true, message: '请选择所在省份', trigger: 'blur'},{validator: isSelect  }],
+          // province:[{ required: true, message: '请选择所在省份', trigger: 'blur'},{validator: isSelect  }],
         },
       }
     },
@@ -1453,7 +1451,8 @@
         }
       },
       handleCreate() {
-        this.resetTemp()
+        this.resetTemp();
+        this.cityOptions =  []
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
@@ -1466,7 +1465,8 @@
             patientAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
-              this.getList();
+              // this.getList();
+              this.$router.push({ path: '/data/custorm/'+res.data.id})
               this.$message({
                 message: '新增成功',
                 type: 'success'
@@ -1479,6 +1479,9 @@
         this.updateId = row.id
         patientView(row.id).then(response => {
           this.temp = response.data
+          if(response.data.province!=''){
+            this.cityOptions =  this.provinces.find(item => item.name == response.data.province).citys
+          }
         });
         // this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update';
@@ -1491,6 +1494,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp);
+            console.log(tempData)
             patientUpdate(id,tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, this.temp);

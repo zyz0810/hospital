@@ -20,8 +20,8 @@
             <el-form-item label="电话：">
               <el-input v-model="patientInfo.phone" readOnly class="border-none"></el-input>
             </el-form-item>
-            <el-form-item label="地址：">
-              <el-input v-if="patientInfo.address!=null" v-model="patientInfo.province+patientInfo.address" readOnly class="border-none"></el-input>
+            <el-form-item label="所在地区：">
+              <el-input v-if="patientInfo.city!=null" v-model="patientInfo.province+patientInfo.city" readOnly class="border-none"></el-input>
               <el-input v-else v-model="patientInfo.province" readOnly class="border-none"></el-input>
             </el-form-item>
           </el-form>
@@ -872,7 +872,6 @@
 
               "淮安",
 
-              "宿州",
 
               "其他"
 
@@ -2242,6 +2241,9 @@
           // this.projectId = row.id
           this.dialogStatus = 'updatePatient';
           this.patientTemp = Object.assign({}, this.patientInfo) // copy obj
+          if(this.patientTemp.province!=''){
+            this.cityOptions =  this.provinces.find(item => item.name == this.patientTemp.province).citys
+          }
         }else if(name == 'out'){
           // this.updateId = row.hospital_id
           // this.projectId = row.id

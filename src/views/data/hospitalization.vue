@@ -65,11 +65,11 @@
           {{ scope.row.leave_type }}
         </template>
       </el-table-column>
-      <el-table-column label="责任护士" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.nurse }}
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="责任护士" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.nurse }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="主治医师" align="center">
         <template slot-scope="scope">
           {{ scope.row.doctor_name }}
@@ -119,9 +119,9 @@
         <el-form-item label="科室" prop="department">
           <el-input v-model="temp.department" placeholder="请输入科室"/>
         </el-form-item>
-        <el-form-item label="责任护士" prop="nurse">
-          <el-input v-model="temp.nurse" placeholder="请输入责任护士" />
-        </el-form-item>
+        <!--<el-form-item label="责任护士" prop="nurse">-->
+          <!--<el-input v-model="temp.nurse" placeholder="请输入责任护士" />-->
+        <!--</el-form-item>-->
         <el-form-item label="主治医生" prop="doctor_name">
           <el-select v-model="temp.doctor_name" class="filter-item" :placeholder="temp.hospital_id==undefined ? '请先选择医院':'请选择医生'" :disabled="temp.hospital_id==undefined ? true:false" @change="changeDoctor('add',$event)">
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
@@ -203,7 +203,7 @@
           region:'',
           department:'',
           leave_type:'',
-          nurse:'',
+          // nurse:'',
           in_date:'',
           leave_date:''
         },
@@ -216,7 +216,7 @@
           region:[{ required: true, message: '请填写缴病区', trigger: 'change' }],
           department:[{ required: true, message: '请填写科室', trigger: 'change' }],
           leave_type:[{ required: true, message: '请出院方式', trigger: 'change' }],
-          nurse:[{ required: true, message: '请填写责任护士', trigger: 'change' }],
+          // nurse:[{ required: true, message: '请填写责任护士', trigger: 'change' }],
           in_date:[{ required: true, message: '请选择入院日期', trigger: 'change' }],
           leave_date:[{ required: true, message: '请选择出院日期', trigger: 'change' }]
         },
@@ -338,7 +338,7 @@
           region:'',
           department:'',
           leave_type:'',
-          nurse:'',
+          // nurse:'',
           in_date:'',
           leave_date:''
         }
@@ -374,6 +374,9 @@
         this.updateId=row.id;
         this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
+        doctorList(row.hospital_id).then(response => {
+          this.doctorOption = response.data
+        });
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;
         this.$nextTick(() => {

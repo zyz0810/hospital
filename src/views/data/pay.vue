@@ -374,6 +374,9 @@
       handleUpdate(row) {
         this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
+        doctorList(row.hospital_id).then(response => {
+          this.doctorOption = response.data
+        });
         this.updateId = row.id;
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;

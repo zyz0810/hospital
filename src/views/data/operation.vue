@@ -44,11 +44,11 @@
           {{ scope.row.at_date }}
         </template>
       </el-table-column>
-      <el-table-column label="手术结果" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.result }}
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="手术结果" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.result }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" icon="el-icon-edit" @click="handleUpdate(row)">
@@ -80,9 +80,9 @@
         <el-form-item label="手术日期" prop="at_date">
           <el-date-picker v-model="temp.at_date" type="date" placeholder="请选择手术日期" @change="changeStartDate" value-format="yyyy-MM-dd" />
         </el-form-item>
-        <el-form-item label="手术结果" prop="result">
-          <el-input v-model="temp.result" placeholder="请输入手术结果" />
-        </el-form-item>
+        <!--<el-form-item label="手术结果" prop="result">-->
+          <!--<el-input v-model="temp.result" placeholder="请输入手术结果" />-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -137,7 +137,7 @@
         patientOption:[],
         temp: {
           name: '',
-          result: '',
+          // result: '',
           at_date: '',
           patient_id:undefined,
           patient_name:''
@@ -148,7 +148,7 @@
           patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect}],
           name: [{ required: true, message: '请输入手术名称', trigger: 'change' }],
           at_date: [{ required: true, message: '请选择手术日期', trigger: 'change' }],
-          result: [{ required: true, message: '请输入手术结果', trigger: 'change' }]
+          // result: [{ required: true, message: '请输入手术结果', trigger: 'change' }]
         },
         loading: false,
         updateId:undefined
@@ -230,7 +230,7 @@
       resetTemp() {
         this.temp = {
           name: '',
-          result: '',
+          // result: '',
           at_date: '',
           patient_id:undefined,
           patient_name:''
