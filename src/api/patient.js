@@ -120,3 +120,12 @@ export function patientReturnList(patient_id) {
     method: 'get',
   })
 }
+
+//  病人重名信息
+export function patientsName(query) {
+  return request({
+    url: '/api/patients/names/query',
+    method: 'get',
+    params:query
+  })
+}

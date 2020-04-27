@@ -32,11 +32,11 @@
           {{ scope.row.position }}
         </template>
       </el-table-column>
-      <el-table-column label="联系电话" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.phone }}
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="联系电话" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.phone }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column align="center" label="操作" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" @click="handleUpdate(row)" icon="el-icon-edit">编辑</el-button>
@@ -57,9 +57,9 @@
         <el-form-item label="职位" prop="position">
           <el-input v-model="temp.position" placeholder="请输入职位" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="temp.phone" placeholder="请输入联系电话" autocomplete="off" />
-        </el-form-item>
+        <!--<el-form-item label="联系电话" prop="phone">-->
+          <!--<el-input v-model="temp.phone" placeholder="请输入联系电话" autocomplete="off" />-->
+        <!--</el-form-item>-->
 
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -39,3 +39,14 @@ export function setName(token) {
 export function removeName() {
   return Cookies.remove(NameKey)
 }
+const NameHospital = 'hospital_id';
+export function getHospital() {
+  return Cookies.get(NameHospital)
+}
+export function setHospital(token) {
+  return Cookies.set(NameHospital, token)
+}
+
+export function removeHospital() {
+  return Cookies.remove(NameHospital)
+}

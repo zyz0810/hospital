@@ -509,6 +509,7 @@
   import { consultantsNameList } from '@/api/consultants'
   import { feedbackAdd,feedbackUpdate,feedbackDel } from '@/api/return'
   import { visitorsNameList } from '@/api/visitors'
+  import { getHospital } from '@/utils/auth'
   import store from '@/store'
 
   export default {
@@ -2122,15 +2123,30 @@
       handleCreate(name) {
         if(name == 'out'){
           this.resetTemp();
+          this.temp.hospital_id =  getHospital();
+          this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+          doctorList(this.temp.hospital_id ).then(response => {
+            this.doctorOption = response.data
+          });
           this.dialogStatus = 'createOut'
         }else if(name == 'pay'){
           this.resetPayTemp();
+          this.payTemp.hospital_id =  getHospital();
+          this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+          doctorList(this.payTemp.hospital_id ).then(response => {
+            this.doctorOption = response.data
+          });
           this.dialogStatus = 'createPay'
         }else if(name=='operation'){
           this.resetOperationTemp();
           this.dialogStatus = 'createOperation'
         }else if(name=='hospitalization'){
           this.resetHospitalizationTemp();
+          this.hospitalizationTemp.hospital_id =  getHospital();
+          this.hospitalizationTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+          doctorList(this.hospitalizationTemp.hospital_id ).then(response => {
+            this.doctorOption = response.data
+          });
           this.dialogStatus = 'createHospitalization'
         }else if(name == 'consults'){
           this.resetConsultsTemp();

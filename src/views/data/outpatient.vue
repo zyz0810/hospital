@@ -62,6 +62,16 @@
           {{ scope.row.register_date }}
         </template>
       </el-table-column>
+      <el-table-column label="类型" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.register_date }}
+        </template>
+      </el-table-column>
+      <el-table-column label="费别" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.register_date }}
+        </template>
+      </el-table-column>
       <el-table-column label="接诊医生" align="center">
         <template slot-scope="scope">
           {{ scope.row.doctor_name }}
@@ -103,6 +113,21 @@
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
           <el-select v-model="temp.source" class="filter-item" placeholder="请选择门诊来源" @change="getSource('add',$event)">
             <el-option v-for="item in sourceOption" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="类型" prop="source">
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.source" class="filter-item" placeholder="请选择类型">
+            <el-option label="初诊" value="初诊" />
+            <el-option label="复诊" value="复诊" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="费别" prop="source">
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.source" class="filter-item" placeholder="请选择类型">
+            <el-option label="普通城保" value="普通城保" />
+            <el-option label="自费病人" value="自费病人" />
+            <el-option label="居保其它" value="居保其它" />
           </el-select>
         </el-form-item>
         <el-form-item label="医院" prop="hospital_name">
@@ -164,6 +189,7 @@
   import { diseaseList,levelDiseaseList,getSecondDisease } from '@/api/disease'
   import { hospitalNameList,doctorList } from '@/api/hospital'
   import { nameSearch } from '@/api/patient'
+  import { getHospital } from '@/utils/auth'
   import waves from '@/directive/waves' // waves directive
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -412,7 +438,12 @@
       },
       handleCreate() {
         this.resetTemp();
-        this.doctorOption = [];
+        this.temp.hospital_id =  getHospital();
+        this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+        doctorList(this.temp.hospital_id ).then(response => {
+          this.doctorOption = response.data
+        });
+        // this.doctorOption = [];
         this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;

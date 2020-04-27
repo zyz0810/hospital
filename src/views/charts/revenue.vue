@@ -9,9 +9,9 @@
     <el-row>
       <BarChartFour :chart-data="barChartDataTwo" :BarChartLegend="BarChartLegendTwo" inputName="barChartOne" :divwidth="'80%'"/>
     </el-row>
-    <el-row>
-      <BarChartFour :chart-data="barChartDataThree" :BarChartLegend="BarChartLegendThree" inputName="barChartTwo" :divwidth="'80%'"/>
-    </el-row>
+    <!--<el-row>-->
+      <!--<BarChartFour :chart-data="barChartDataThree" :BarChartLegend="BarChartLegendThree" inputName="barChartTwo" :divwidth="'80%'"/>-->
+    <!--</el-row>-->
     <el-row>
       <BarChartFour :chart-data="barChartDataFour" :BarChartLegend="BarChartLegendFour" inputName="barChartThree" :divwidth="'80%'"/>
     </el-row>

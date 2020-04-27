@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken,getId,setId,removeId,getName,setName,removeName } from '@/utils/auth'
+import { getToken, setToken, removeToken,getId,setId,removeId,getName,setName,removeName,getHospital,setHospital,removeHospital } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 import store from '@/store'
@@ -10,7 +10,8 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
-  id:undefined
+  id:undefined,
+  hospital_id:undefined
 }
 
 const mutations = {
@@ -28,7 +29,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  }
+  },
+  SET_HOSPITAL: (state, id) => {
+    state.hospital_id = id
+  },
 }
 
 const actions = {
@@ -41,9 +45,11 @@ const actions = {
         commit('SET_TOKEN', data.token);
         commit('SET_ID', response.data.id);
         commit('SET_NAME', response.data.name);
+        commit('SET_HOSPITAL', response.data.hospital_id);
         setId(response.data.id);
         setName(response.data.name);
         setToken(data.token);
+        setHospital(response.data.hospital_id);
         resolve()
       }).catch(error => {
         reject(error)
@@ -89,10 +95,12 @@ const actions = {
         commit('SET_TOKEN', '');
         commit('SET_ROLES', []);
         commit('SET_NAME', '');
+        commit('SET_HOSPITAL', '');
         removeToken();
         resetRouter();
         removeId();
         removeName();
+        removeHospital();
 
         // reset visited views and cached views
         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
@@ -114,6 +122,7 @@ const actions = {
       removeToken();
       removeId();
       removeName();
+      removeHospital();
       resolve()
     })
   },

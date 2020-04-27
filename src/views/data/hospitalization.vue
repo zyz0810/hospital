@@ -153,6 +153,7 @@
   import { hospitalizationList,hospitalizationAdd,hospitalizationUpdate,hospitalizationDel,hospitalizationCount } from '@/api/hospitalization'
   import { hospitalNameList,doctorList,projectsNameList } from '@/api/hospital'
   import { nameSearch } from '@/api/patient'
+  import { getHospital } from '@/utils/auth'
   import waves from '@/directive/waves' // waves directive
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -345,6 +346,11 @@
       },
       handleCreate() {
         this.resetTemp();
+        this.temp.hospital_id =  getHospital();
+        this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+        doctorList(this.temp.hospital_id ).then(response => {
+          this.doctorOption = response.data
+        });
         this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;

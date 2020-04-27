@@ -77,7 +77,7 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" :inline="true" label-position="right" label-width="120px" style="width: 600px; margin-left:50px;">
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入姓名" />
+          <el-input v-model="temp.name" placeholder="请输入姓名" @blur="queryNames()"/>
         </el-form-item>
         <el-form-item label="性别">
           <el-select v-model="temp.gender" class="filter-item" placeholder="请选择性别">
@@ -124,7 +124,7 @@
 </template>
 
 <script>
-  import { patientList,patientAdd,patientUpdate,patientDel,patientCount } from '@/api/patient'
+  import { patientList,patientAdd,patientUpdate,patientDel,patientCount,patientsName } from '@/api/patient'
   import { patientView } from '@/api/patient'
   import waves from '@/directive/waves' // waves directive
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -1400,6 +1400,21 @@
       this.getList()
     },
     methods: {
+      queryNames(){
+        patientsName({name:this.temp.name}).then(response => {
+          if(response.data==true){
+            this.$message({
+              message: '有同名病人',
+              type: 'error'
+            });
+          }else{
+            this.$message({
+              message: '新增成功',
+              type: 'success'
+            });
+          }
+        });
+      },
       getProvice(e){
         this.temp.province = e;
         this.temp.city='';
