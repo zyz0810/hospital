@@ -1404,12 +1404,12 @@
         patientsName({name:this.temp.name}).then(response => {
           if(response.data==true){
             this.$message({
-              message: '有同名病人',
+              message: '该姓名已存在',
               type: 'error'
             });
           }else{
             this.$message({
-              message: '新增成功',
+              message: '该姓名不存在',
               type: 'success'
             });
           }

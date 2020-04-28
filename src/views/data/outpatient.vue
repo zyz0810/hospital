@@ -38,13 +38,13 @@
       <el-table-column label="门诊病人" align="center">
         <template slot-scope="scope">
           <router-link :to="'/data/custorm/'+scope.row.patient_id" class="el-link el-link--primary is-underline patient_name">
-            {{ scope.row.patient_name }}
+            {{ scope.row.patient_name || '--'  }}
           </router-link>
         </template>
       </el-table-column>
       <el-table-column label="门诊医院" align="center">
         <template slot-scope="scope">
-          {{ scope.row.hospital_name }}
+          {{ scope.row.hospital_name || '--'  }}
         </template>
       </el-table-column>
       <!--<el-table-column label="一级病种" align="center">-->
@@ -59,32 +59,32 @@
       <!--</el-table-column>-->
       <el-table-column label="门诊日期" align="center">
         <template slot-scope="scope">
-          {{ scope.row.register_date }}
+          {{ scope.row.register_date || '--'  }}
         </template>
       </el-table-column>
       <el-table-column label="类型" align="center">
         <template slot-scope="scope">
-          {{ scope.row.register_date }}
+          {{ scope.row.visit_type || '--' }}
         </template>
       </el-table-column>
       <el-table-column label="费别" align="center">
         <template slot-scope="scope">
-          {{ scope.row.register_date }}
+          {{ scope.row.pay_type || '--'  }}
         </template>
       </el-table-column>
       <el-table-column label="接诊医生" align="center">
         <template slot-scope="scope">
-          {{ scope.row.doctor_name }}
+          {{ scope.row.doctor_name || '--'  }}
         </template>
       </el-table-column>
       <el-table-column label="诊断结果" align="center">
         <template slot-scope="scope">
-          {{ scope.row.result }}
+          {{ scope.row.result || '--'  }}
         </template>
       </el-table-column>
       <el-table-column label="来源" align="center">
         <template slot-scope="scope">
-          {{ scope.row.source }}
+          {{ scope.row.source || '--'  }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -115,16 +115,16 @@
             <el-option v-for="item in sourceOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型" prop="source">
+        <el-form-item label="类型" prop="visit_type">
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
-          <el-select v-model="temp.source" class="filter-item" placeholder="请选择类型">
+          <el-select v-model="temp.visit_type" class="filter-item" placeholder="请选择类型">
             <el-option label="初诊" value="初诊" />
             <el-option label="复诊" value="复诊" />
           </el-select>
         </el-form-item>
-        <el-form-item label="费别" prop="source">
+        <el-form-item label="费别" prop="pay_type">
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
-          <el-select v-model="temp.source" class="filter-item" placeholder="请选择类型">
+          <el-select v-model="temp.pay_type" class="filter-item" placeholder="请选择费别">
             <el-option label="普通城保" value="普通城保" />
             <el-option label="自费病人" value="自费病人" />
             <el-option label="居保其它" value="居保其它" />
@@ -243,6 +243,8 @@
           result:'',
           source_id:undefined,
           source:'',
+          pay_type:'',
+          visit_type:''
           // disease_first_level_id:undefined,
           // disease_first_level_name:'',
           // disease_second_level_id:undefined,
@@ -430,6 +432,8 @@
           result:'',
           source_id:undefined,
           source:'',
+          pay_type:'',
+          visit_type:''
           // disease_first_level_id:undefined,
           // disease_first_level_name:'',
           // disease_second_level_id:undefined,

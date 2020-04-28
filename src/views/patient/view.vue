@@ -41,42 +41,52 @@
         <el-table ref="multipleTable" v-loading="outlistLoading" :data="outList" element-loading-text="拼命加载中" stripe border fit highlight-current-row>
           <el-table-column label="门诊日期" align="center">
             <template slot-scope="scope">
-              {{ scope.row.register_date }}
+              {{ scope.row.register_date || '--'  }}
+            </template>
+          </el-table-column>
+          <el-table-column label="类型" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.visit_type || '--'  }}
+            </template>
+          </el-table-column>
+          <el-table-column label="费别" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.pay_type || '--'  }}
             </template>
           </el-table-column>
           <el-table-column label="门诊医院" align="center">
             <template slot-scope="scope">
-              {{ scope.row.hospital_name }}
+              {{ scope.row.hospital_name || '--'  }}
             </template>
           </el-table-column>
-          <el-table-column label="一级病种" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.disease_first_level_name }}
-            </template>
-          </el-table-column>
-          <el-table-column label="二级病种" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.disease_second_level_name }}
-            </template>
-          </el-table-column>
+<!--          <el-table-column label="一级病种" align="center">-->
+<!--            <template slot-scope="scope">-->
+<!--              {{ scope.row.disease_first_level_name }}-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="二级病种" align="center">-->
+<!--            <template slot-scope="scope">-->
+<!--              {{ scope.row.disease_second_level_name }}-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column label="看诊医生" align="center">
             <template slot-scope="scope">
-              {{ scope.row.doctor_name }}
+              {{ scope.row.doctor_name || '--'  }}
             </template>
           </el-table-column>
           <el-table-column label="看诊结果" align="center">
             <template slot-scope="scope">
-              {{ scope.row.result }}
+              {{ scope.row.result || '--'  }}
             </template>
           </el-table-column>
           <el-table-column label="挂号类别" align="center">
             <template slot-scope="scope">
-              {{ scope.row.type }}
+              {{ scope.row.type || '--'  }}
             </template>
           </el-table-column>
           <el-table-column align="center" label="来源">
             <template slot-scope="scope">
-              {{ scope.row.source }}
+              {{ scope.row.source || '--'  }}
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -325,6 +335,21 @@
             <el-option v-for="item in sourceOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
+        <el-form-item label="类型" prop="visit_type">
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.visit_type" class="filter-item" placeholder="请选择类型">
+            <el-option label="初诊" value="初诊" />
+            <el-option label="复诊" value="复诊" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="费别" prop="payType">
+          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
+          <el-select v-model="temp.payType" class="filter-item" placeholder="请选择费别">
+            <el-option label="普通城保" value="普通城保" />
+            <el-option label="自费病人" value="自费病人" />
+            <el-option label="居保其它" value="居保其它" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="医院" prop="hospital_name">
           <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择医院" @change="getHospital('out',$event)">
             <el-option v-for="item in hospitalOption" :key="item.id" :label="item.name" :value="item.id" />
@@ -335,18 +360,18 @@
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="病种" prop="disease_first_level_name">
-          <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
-          <el-select v-model="temp.disease_first_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">
-            <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="" prop="disease_second_level_name">
-          <!--二级病种-->
-          <el-select v-model="temp.disease_second_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel($event)">
-            <el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="病种" prop="disease_first_level_name">-->
+<!--          &lt;!&ndash;<el-input v-model="temp.source" placeholder="请填写来源"/>&ndash;&gt;-->
+<!--          <el-select v-model="temp.disease_first_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDisease('add',$event)">-->
+<!--            <el-option v-for="item in diseaseOption" :key="item.id" :label="item.name" :value="item.id" />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="" prop="disease_second_level_name">-->
+<!--          &lt;!&ndash;二级病种&ndash;&gt;-->
+<!--          <el-select v-model="temp.disease_second_level_name" class="filter-item" placeholder="请选择门诊病种" @change="getDiseaseLevel($event)">-->
+<!--            <el-option v-for="item in levelDiseaseOption" :key="item.id" :label="item.name" :value="item.id" />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="挂号类型" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="请选择挂号类型">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="item" />
@@ -1796,10 +1821,12 @@
           result:'',
           source_id:undefined,
           source:'',
-          disease_first_level_id:undefined,
-          disease_first_level_name:'',
-          disease_second_level_id:'',
-          disease_second_level_name:'',
+          pay_type:'',
+          visit_type:''
+          // disease_first_level_id:undefined,
+          // disease_first_level_name:'',
+          // disease_second_level_id:'',
+          // disease_second_level_name:'',
         },
         sourceOption:[],
         diseaseOption:[],
@@ -2007,10 +2034,12 @@
           result:'',
           source_id:undefined,
           source:'',
-          disease_first_level_id:undefined,
-          disease_first_level_name:'',
-          disease_second_level_id:undefined,
-          disease_second_level_name:'',
+          pay_type:'',
+          visit_type:''
+          // disease_first_level_id:undefined,
+          // disease_first_level_name:'',
+          // disease_second_level_id:undefined,
+          // disease_second_level_name:'',
         }
       },
       resetPayTemp(){
