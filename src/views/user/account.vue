@@ -18,7 +18,7 @@
       </el-table-column>
       <el-table-column label="所在医院" align="center">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.hospital_name }}
         </template>
       </el-table-column>
       <el-table-column label="权限" align="center">
