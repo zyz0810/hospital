@@ -442,11 +442,19 @@
       },
       handleCreate() {
         this.resetTemp();
-        this.temp.hospital_id =  getHospital();
-        this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-        doctorList(this.temp.hospital_id ).then(response => {
-          this.doctorOption = response.data
-        });
+        console.log(getHospital().length)
+        console.log(getHospital())
+        if(getHospital()!='null'){
+          this.temp.hospital_id =  getHospital();
+          this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+          doctorList(this.temp.hospital_id ).then(response => {
+            this.doctorOption = response.data
+          });
+        }else{
+          this.temp.hospital_id =  undefined;
+          this.temp.hospital_name = '';
+        }
+
         // this.doctorOption = [];
         this.patientOption=[];
         this.dialogStatus = 'create';

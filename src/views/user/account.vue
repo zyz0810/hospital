@@ -43,7 +43,12 @@
           <el-input v-model="temp.name" placeholder="请输入姓名" autocomplete="off" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off"/>
+          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off" @blur="updatePassword()"/>
+        </el-form-item>
+        <el-form-item label="所在医院" prop="hospital_name">
+          <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择医院" @change='getHospital("add",$event)'>
+            <el-option v-for="item in hospitalOption" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="权限" prop="permissions">
           <!--<el-input v-model="temp.userAgent" placeholder="请选择" autocomplete="off" />-->
@@ -62,6 +67,7 @@
 
 <script>
   import { permisionsList,accountsList,accountsPermissions,accountAdd,accountUpdate,accountDel } from '@/api/account'
+  import { hospitalNameList } from '@/api/hospital'
   import { validatePhoneTwo,validateIdNo } from '@/utils/validate'
   import waves from '@/directive/waves' // waves directive
   export default {
@@ -82,10 +88,13 @@
           update: '修改账号信息',
           create: '新增账号信息'
         },
+        hospitalOption:[],
         temp: {
           username:'',
           name: '',
           password:'',
+          hospital_name:'',
+          hospital_id:undefined,
           permissions:[]
         },
         rules: {
@@ -96,10 +105,14 @@
         // perssionsSelectedList:[]
       }
     },
-    created() {
-      this.getList()
+    mounted() {
+      this.getList();
+      this.getHospitalName();
     },
     methods: {
+      updatePassword(){
+        console.log('3232')
+      },
       async getList() {
         const { data } = await accountsList();
         this.listLoading = true;
@@ -112,6 +125,19 @@
         })
 
       },
+      getHospitalName(){
+        hospitalNameList().then(response => {
+          this.hospitalOption = response.data
+        })
+      },
+      getHospital(val,e){
+        if(val == 'add'){
+          this.temp.hospital_id = e;
+        }else if(val=='filter'){
+          this.listQuery.hospital_id = e;
+          // this.getList()
+        }
+      },
       handleFilter() {
         this.getList()
       },
@@ -120,6 +146,8 @@
           username:'',
           name: '',
           password:'',
+          hospital_name:'',
+          hospital_id:undefined,
           permissions:[]
         }
       },
@@ -135,7 +163,9 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             // this.temp.permissions = this.perssionsSelectedList;
-            accountAdd(this.temp).then((res) => {
+            let tempData = Object.assign({},this.temp);
+            this.$delete(tempData,'hospital_name');
+            accountAdd(tempData).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
               this.$message({
@@ -152,8 +182,11 @@
         this.temp.name = row.name;
         this.temp.password = '123456';
         this.temp.username = row.username;
+        this.temp.hospital_name = row.hospital_name;
+        this.temp.hospital_id = row.hospital_id;
         this.temp.permissions=row.permissions;
         this.dialogFormVisible = true;
+        console.log(row)
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -162,9 +195,10 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp);
-            if (tempData.password == '123456'){
-              this.$delete(tempData,'password');
-            }
+            // if (tempData.password == '123456'){
+            //   this.$delete(tempData,'password');
+            // }
+            this.$delete(tempData,'hospital_name');
             accountUpdate(this.temp.id,tempData).then((res) => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, res.data);

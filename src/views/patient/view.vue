@@ -342,9 +342,9 @@
             <el-option label="复诊" value="复诊" />
           </el-select>
         </el-form-item>
-        <el-form-item label="费别" prop="payType">
+        <el-form-item label="费别" prop="pay_type">
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
-          <el-select v-model="temp.payType" class="filter-item" placeholder="请选择费别">
+          <el-select v-model="temp.pay_type" class="filter-item" placeholder="请选择费别">
             <el-option label="普通城保" value="普通城保" />
             <el-option label="自费病人" value="自费病人" />
             <el-option label="居保其它" value="居保其它" />
@@ -422,7 +422,7 @@
           <el-input v-model="operationTemp.name" placeholder="请输入手术名称"/>
         </el-form-item>
         <el-form-item label="手术日期" prop="at_date">
-          <el-date-picker v-model="operationTemp.at_date" type="date" placeholder="请选择手术日期" @change="changeStartDate" value-format="yyyy-MM-dd" />
+          <el-date-picker v-model="operationTemp.at_date" type="date" placeholder="请选择手术日期" value-format="yyyy-MM-dd" />
         </el-form-item>
         <el-form-item label="手术结果" prop="result">
           <el-input v-model="operationTemp.result" placeholder="请输入手术结果" />
@@ -521,7 +521,7 @@
 </template>
 
 <script>
-  import { patientView,patientOutList,patientPayList,patientHospitalizationList,patientOperationList,patientConsultsList,patientReturnList } from '@/api/patient'
+  import { patientView,patientOutList,patientPayList,patientHospitalizationList,patientOperationList,patientConsultsList,patientReturnList,paymentsAdd } from '@/api/patient'
   import { patientUpdate } from '@/api/patient'
   import { sourceList } from '@/api/source'
   import { diseaseList,getSecondDisease } from '@/api/disease'
@@ -2110,8 +2110,8 @@
         });
       },
       fetchData() {
-
         var id = this.$route.params && this.$route.params.id;
+
         patientView(id).then(response => {
           this.patientInfo = response.data
         });
@@ -2146,24 +2146,49 @@
       },
       gethospitalName(){
         hospitalNameList().then(response => {
-          this.hospitalOption = response.data
+          this.hospitalOption = response.data;
         })
       },
       handleCreate(name) {
         if(name == 'out'){
           this.resetTemp();
-          this.temp.hospital_id =  getHospital();
-          this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-          doctorList(this.temp.hospital_id ).then(response => {
-            this.doctorOption = response.data
-          });
+          if(getHospital()!='null'){
+            this.temp.hospital_id =  getHospital();
+            this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+            doctorList(this.temp.hospital_id ).then(response => {
+              this.doctorOption = response.data
+            });
+          }else{
+            this.temp.hospital_id =  undefined;
+            this.temp.hospital_name = '';
+          }
           this.dialogStatus = 'createOut'
         }else if(name == 'pay'){
           this.resetPayTemp();
-          this.payTemp.hospital_id =  getHospital();
-          this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-          doctorList(this.payTemp.hospital_id ).then(response => {
-            this.doctorOption = response.data
+          if(getHospital()!='null'){
+            this.payTemp.hospital_id =  getHospital();
+            this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+            doctorList(this.payTemp.hospital_id ).then(response => {
+              this.doctorOption = response.data
+            });
+          }else{
+            this.payTemp.hospital_id =  undefined;
+            this.payTemp.hospital_name = '';
+          }
+          var id = this.$route.params && this.$route.params.id;
+          paymentsAdd(id).then(response => {
+            if(response.data.hospital_id != 'null'){
+              this.payTemp.hospital_id = response.data.hospital_id;
+              this.payTemp.doctor_id = response.data.doctor_id;
+              this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == response.data.hospital_id).name;
+              doctorList(response.data.hospital_id ).then(res => {
+                this.doctorOption = res.data
+                this.payTemp.doctor_name = this.doctorOption.find(v => v.id == response.data.doctor_id).name;
+              });
+            }
+            if(response.data.at_date != 'null'){
+              this.payTemp.at_date = response.data.at_date;
+            }
           });
           this.dialogStatus = 'createPay'
         }else if(name=='operation'){
@@ -2171,11 +2196,16 @@
           this.dialogStatus = 'createOperation'
         }else if(name=='hospitalization'){
           this.resetHospitalizationTemp();
-          this.hospitalizationTemp.hospital_id =  getHospital();
-          this.hospitalizationTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-          doctorList(this.hospitalizationTemp.hospital_id ).then(response => {
-            this.doctorOption = response.data
-          });
+          if(getHospital()!='null'){
+            this.hospitalizationTemp.hospital_id =  getHospital();
+            this.hospitalizationTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+            doctorList(this.hospitalizationTemp.hospital_id ).then(response => {
+              this.doctorOption = response.data
+            });
+          }else{
+            this.hospitalizationTemp.hospital_id =  undefined;
+            this.hospitalizationTemp.hospital_name = '';
+          }
           this.dialogStatus = 'createHospitalization'
         }else if(name == 'consults'){
           this.resetConsultsTemp();

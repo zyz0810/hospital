@@ -599,7 +599,7 @@ export default {
   created() {
     this.getData();
     this.getList();
-    this.getDisease();
+    // this.getDisease();
     this.getSource();
   },
   methods: {
@@ -696,23 +696,6 @@ export default {
       var legentList=[];
       let liss = data;
       let barWidth='10%';
-      // if(data.length<5){
-      //   barWidth='20%'
-      // }else if(data.length>=5 &&data.length<10){
-      //   barWidth='10%'
-      // }else if(data.length>=10&&data.length<15){
-      //   barWidth='7%'
-      // }else if(data.length>=15&&data.length<20){
-      //   barWidth='5%'
-      // }else if(data.length>=20&&data.length<25){
-      //   barWidth='4%'
-      // }else if(data.length>=25&&data.length<30){
-      //   barWidth='3%'
-      // }else if(data.length>=30&&data.length<50){
-      //   barWidth='2%'
-      // }else{
-      //   barWidth='1%'
-      // }
       for(let i=0;i<data.length;i++){
         const {data}  = await diseaseTurnover({disease_id:liss[i].id});
         if(i==0){

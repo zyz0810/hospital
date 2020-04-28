@@ -129,3 +129,10 @@ export function patientsName(query) {
     params:query
   })
 }
+//  病人详情页新增的默认值
+export function paymentsAdd(patient_id) {
+  return request({
+    url: `/api/patients/${patient_id}/payments/add/default/`,
+    method: 'get',
+  })
+}
