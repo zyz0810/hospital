@@ -43,7 +43,7 @@
           <el-input v-model="temp.name" placeholder="请输入姓名" autocomplete="off" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off" @blur="updatePassword()"/>
+          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off"/>
         </el-form-item>
         <el-form-item label="所在医院" prop="hospital_name">
           <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择医院" @change='getHospital("add",$event)'>
@@ -62,6 +62,38 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确 定</el-button>
       </div>
     </el-dialog>
+
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUpdateVisible">
+      <el-form ref="dataForm" :model="temp" :rules="rulesUpdate" label-position="right" label-width="120px">
+        <el-form-item label="账户名" prop="username">
+          <el-input v-model="temp.username" placeholder="请输入账户名" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入姓名" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="temp.password" placeholder="请输入密码" type="password" autocomplete="off"/>
+        </el-form-item>
+        <el-form-item label="所在医院" prop="hospital_name">
+          <el-select v-model="temp.hospital_name" class="filter-item" placeholder="请选择医院" @change='getHospital("add",$event)'>
+            <el-option v-for="item in hospitalOption" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="权限" prop="permissions">
+          <!--<el-input v-model="temp.userAgent" placeholder="请选择" autocomplete="off" />-->
+          <el-checkbox-group v-model="temp.permissions">
+            <el-checkbox :label="item" :key="item" v-for="item in perssionsList"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -82,6 +114,7 @@
         listQuery: {
           name:''
         },
+        dialogUpdateVisible:false,
         dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
@@ -101,6 +134,9 @@
           username: [{ required: true, message: '请输入账号名', trigger: 'blur' }],
           password:[{ required: true, message: '请输入密码', trigger: 'blur' }]
         },
+        rulesUpdate: {
+          username: [{ required: true, message: '请输入账号名', trigger: 'blur' }],
+        },
         perssionsList:[],
         // perssionsSelectedList:[]
       }
@@ -110,9 +146,6 @@
       this.getHospitalName();
     },
     methods: {
-      updatePassword(){
-        console.log('3232')
-      },
       async getList() {
         const { data } = await accountsList();
         this.listLoading = true;
@@ -180,13 +213,12 @@
         this.dialogStatus = 'update';
         this.temp.id = row.id;
         this.temp.name = row.name;
-        this.temp.password = '123456';
+        this.temp.password = '';
         this.temp.username = row.username;
         this.temp.hospital_name = row.hospital_name;
         this.temp.hospital_id = row.hospital_id;
         this.temp.permissions=row.permissions;
-        this.dialogFormVisible = true;
-        console.log(row)
+        this.dialogUpdateVisible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -195,14 +227,14 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp);
-            // if (tempData.password == '123456'){
-            //   this.$delete(tempData,'password');
-            // }
+            if (tempData.password == ''){
+              this.$delete(tempData,'password');
+            }
             this.$delete(tempData,'hospital_name');
             accountUpdate(this.temp.id,tempData).then((res) => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, res.data);
-              this.dialogFormVisible = false;
+              this.dialogUpdateVisible = false;
               this.$message({
                 message: '修改成功',
                 type: 'success'
