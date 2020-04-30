@@ -143,7 +143,7 @@
 <script>
   import { payList,payAdd,payUpdate,payDel,payCount } from '@/api/pay'
   import { hospitalNameList,doctorList,projectsNameList } from '@/api/hospital'
-  import { nameSearch } from '@/api/patient'
+  import {nameSearch, paymentsAdd} from '@/api/patient'
   import { getHospital } from '@/utils/auth'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -223,7 +223,21 @@
       },
       changeHref(val,e){
         if(val == 'add'){
-          this.temp.patient_id= e
+          this.temp.patient_id= e;
+          paymentsAdd(this.temp.patient_id).then(response => {
+            if(response.data.hospital_id != 'null'){
+              this.temp.hospital_id = response.data.hospital_id;
+              this.temp.doctor_id = response.data.doctor_id;
+              this.temp.hospital_name = this.hospitalOption.find(v => v.id == response.data.hospital_id).name;
+              doctorList(response.data.hospital_id ).then(res => {
+                this.doctorOption = res.data
+                this.temp.doctor_name = this.doctorOption.find(v => v.id == response.data.doctor_id).name;
+              });
+            }
+            if(response.data.at_date != 'null'){
+              this.temp.pay_date = response.data.at_date;
+            }
+          });
         }else if(val == 'filter'){
           this.listQuery.patient_id= e;
           this.listQuery.page = 1;
@@ -346,16 +360,17 @@
       },
       handleCreate() {
         this.resetTemp();
-        if(getHospital()!='null'){
-          this.temp.hospital_id =  getHospital();
-          this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-          doctorList(this.temp.hospital_id ).then(response => {
-            this.doctorOption = response.data
-          });
-        }else{
-          this.temp.hospital_id =  undefined;
-          this.temp.hospital_name = '';
-        }
+        console.log(getHospital())
+        // if(getHospital()!='null'){
+        //   this.temp.hospital_id =  getHospital();
+        //   this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+        //   doctorList(this.temp.hospital_id ).then(response => {
+        //     this.doctorOption = response.data
+        //   });
+        // }else{
+        //   this.temp.hospital_id =  undefined;
+        //   this.temp.hospital_name = '';
+        // }
         this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;

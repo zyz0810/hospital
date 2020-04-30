@@ -75,9 +75,12 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.page_size" @pagination="getList" class="text-right"/>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" :inline="true" label-position="right" label-width="120px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入姓名" @blur="queryNames()"/>
+      <el-form ref="dataForm" :rules="rules" :model="temp" :inline="true" label-position="right" label-width="120px" style="position: relative;width: 600px; margin-left:50px;">
+        <span v-if="nameMessage == true" style="position: absolute;top: 10px;left: 320px; font-size: 12px; color: red;">该姓名已存在</span>
+        <span v-else-if="nameMessage == false" style="position: absolute;top: 10px;left: 320px; font-size: 12px; color: #1890ff;">该姓名不存在</span>
+        <el-form-item label="姓名" prop="name" style="position: relative;">
+
+          <el-input v-model="temp.name" placeholder="请输入姓名" @input="queryNames()"/>
         </el-form-item>
         <el-form-item label="性别">
           <el-select v-model="temp.gender" class="filter-item" placeholder="请选择性别">
@@ -128,7 +131,7 @@
   import { patientView } from '@/api/patient'
   import waves from '@/directive/waves' // waves directive
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import { validatePhoneTwo,validateIdNo } from '@/utils/validate'
+  import { isIntegerNotMust } from '@/utils/validate'
 
   export default {
     name: 'ComplexTable',
@@ -1388,8 +1391,10 @@
           update: '修改病人信息',
           create: '新增病人信息'
         },
+        nameMessage:null,
         rules: {
           name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+          age:[{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:isIntegerNotMust}]
           // phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}],
           // idnum:[{ required: true, message: '身份证号不能为空', trigger: 'blur' },{validator:validateIdNo}],
           // province:[{ required: true, message: '请选择所在省份', trigger: 'blur'},{validator: isSelect  }],
@@ -1401,19 +1406,26 @@
     },
     methods: {
       queryNames(){
-        patientsName({name:this.temp.name}).then(response => {
-          if(response.data==true){
-            this.$message({
-              message: '该姓名已存在',
-              type: 'error'
-            });
-          }else{
-            this.$message({
-              message: '该姓名不存在',
-              type: 'success'
-            });
-          }
-        });
+        console.log('筛选')
+        if(this.temp.name != ''){
+          patientsName({name:this.temp.name}).then(response => {
+            this.nameMessage = response.data;
+            // if(response.data==true){
+            //   // this.$message({
+            //   //   message: '该姓名已存在',
+            //   //   type: 'error'
+            //   // });
+            // }else{
+            //   // this.$message({
+            //   //   message: '该姓名不存在',
+            //   //   type: 'success'
+            //   // });
+            // }
+          });
+        }else{
+          this.nameMessage = null;
+        }
+
       },
       getProvice(e){
         this.temp.province = e;

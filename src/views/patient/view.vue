@@ -2187,7 +2187,7 @@
               });
             }
             if(response.data.at_date != 'null'){
-              this.payTemp.at_date = response.data.at_date;
+              this.payTemp.pay_date = response.data.at_date;
             }
           });
           this.dialogStatus = 'createPay'
