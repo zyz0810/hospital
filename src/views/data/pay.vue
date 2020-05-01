@@ -194,7 +194,8 @@
           doctor_name:'',
           hospital_name:'',
           pay_date: '',
-          amount:''
+          amount:'',
+          type:''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -205,7 +206,7 @@
           doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect }],
           type:[{ required: true, message: '请选择缴费类型', trigger: 'change',validator: isSelect }],
           pay_date:[{ required: true, message: '请选择缴费日期', trigger: 'change',validator: isSelect }],
-          amount:[{ required: true, message: '请填写缴费数目', trigger: 'change' }],
+          amount:[{ required: true, message: '请输入缴费数目', trigger: 'change' }],
         },
         projectsOption:[],
         doctorOption:[],
@@ -233,8 +234,11 @@
                 this.doctorOption = res.data
                 this.temp.doctor_name = this.doctorOption.find(v => v.id == response.data.doctor_id).name;
               });
+              projectsNameList(response.data.hospital_id ).then(response => {
+                this.projectsOption = response.data
+              });
             }
-            if(response.data.at_date != 'null'){
+            if(response.data.at_date != null){
               this.temp.pay_date = response.data.at_date;
             }
           });
@@ -355,22 +359,12 @@
           doctor_name:'',
           hospital_name:'',
           pay_date: '',
-          amount:''
+          amount:'',
+          type:'',
         }
       },
       handleCreate() {
         this.resetTemp();
-        console.log(getHospital())
-        // if(getHospital()!='null'){
-        //   this.temp.hospital_id =  getHospital();
-        //   this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-        //   doctorList(this.temp.hospital_id ).then(response => {
-        //     this.doctorOption = response.data
-        //   });
-        // }else{
-        //   this.temp.hospital_id =  undefined;
-        //   this.temp.hospital_name = '';
-        // }
         this.patientOption=[];
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
@@ -381,11 +375,12 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.$delete(this.temp,'patient_name');
-            this.$delete(this.temp,'project_name');
-            this.$delete(this.temp,'doctor_name');
-            this.$delete(this.temp,'hospital_name');
-            payAdd(this.temp).then((res) => {
+            const temp = Object.assign({},this.temp);
+            this.$delete(temp,'patient_name');
+            this.$delete(temp,'project_name');
+            this.$delete(temp,'doctor_name');
+            this.$delete(temp,'hospital_name');
+            payAdd(temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
               this.getList();
@@ -403,6 +398,9 @@
         doctorList(row.hospital_id).then(response => {
           this.doctorOption = response.data
         });
+        projectsNameList(row.hospital_id ).then(response => {
+          this.projectsOption = response.data
+        });
         this.updateId = row.id;
         this.dialogStatus = 'update';
         this.dialogFormVisible = true;
@@ -413,13 +411,13 @@
       updateData(id) {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.$delete(this.temp,'patient_name');
-            this.$delete(this.temp,'project_name');
-            this.$delete(this.temp,'doctor_name');
-            this.$delete(this.temp,'hospital_name');
+            const temp = Object.assign({},this.temp);
+            this.$delete(temp,'patient_name');
+            this.$delete(temp,'project_name');
+            this.$delete(temp,'doctor_name');
+            this.$delete(temp,'hospital_name');
             // this.$delete(this.temp,'id')
-            const tempData = Object.assign({}, this.temp);
-            payUpdate(id,tempData).then((res) => {
+            payUpdate(id,temp).then((res) => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, res.data);
               this.dialogFormVisible = false;

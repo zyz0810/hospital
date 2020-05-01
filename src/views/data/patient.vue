@@ -1393,8 +1393,8 @@
         },
         nameMessage:null,
         rules: {
-          name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-          age:[{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:isIntegerNotMust}]
+          name: [{ required: true, message: '请输入病人姓名', trigger: 'change' }],
+          age:[{ trigger: 'change' },{validator:isIntegerNotMust}]
           // phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}],
           // idnum:[{ required: true, message: '身份证号不能为空', trigger: 'blur' },{validator:validateIdNo}],
           // province:[{ required: true, message: '请选择所在省份', trigger: 'blur'},{validator: isSelect  }],
@@ -1406,7 +1406,6 @@
     },
     methods: {
       queryNames(){
-        console.log('筛选')
         if(this.temp.name != ''){
           patientsName({name:this.temp.name}).then(response => {
             this.nameMessage = response.data;
@@ -1521,7 +1520,6 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp);
-            console.log(tempData)
             patientUpdate(id,tempData).then(() => {
               const index = this.list.findIndex(v => v.id === this.temp.id);
               this.list.splice(index, 1, this.temp);

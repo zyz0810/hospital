@@ -131,11 +131,11 @@
           permissions:[]
         },
         rules: {
-          username: [{ required: true, message: '请输入账号名', trigger: 'blur' }],
-          password:[{ required: true, message: '请输入密码', trigger: 'blur' }]
+          username: [{ required: true, message: '请输入账号名', trigger: 'change' }],
+          password:[{ required: true, message: '请输入密码', trigger: 'change' }]
         },
         rulesUpdate: {
-          username: [{ required: true, message: '请输入账号名', trigger: 'blur' }],
+          username: [{ required: true, message: '请输入账号名', trigger: 'change' }],
         },
         perssionsList:[],
         // perssionsSelectedList:[]

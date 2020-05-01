@@ -202,11 +202,11 @@
               {{ scope.row.leave_type }}
             </template>
           </el-table-column>
-          <el-table-column label="责任护士" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.nurse }}
-            </template>
-          </el-table-column>
+          <!--<el-table-column label="责任护士" align="center">-->
+            <!--<template slot-scope="scope">-->
+              <!--{{ scope.row.nurse }}-->
+            <!--</template>-->
+          <!--</el-table-column>-->
 
           <el-table-column label="主治医师" align="center">
             <template slot-scope="scope">
@@ -328,7 +328,7 @@
           <el-input type="text" v-model="patientTemp.address" placeholder="请输入详细地址" />
         </el-form-item>
       </el-form>
-      <el-form ref="dataForm" :rules="rules" :model="temp" v-if="dialogStatus==='createOut'||dialogStatus==='updateOut'" :inline="true" label-position="right" label-width="120px" style="width: 600px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rulesOut" :model="temp" v-if="dialogStatus==='createOut'||dialogStatus==='updateOut'" :inline="true" label-position="right" label-width="120px" style="width: 600px; margin-left:50px;">
         <el-form-item label="来源" prop="source">
           <!--<el-input v-model="temp.source" placeholder="请填写来源"/>-->
           <el-select v-model="temp.source" class="filter-item" placeholder="请选择门诊来源" @change="getSource('add',$event)">
@@ -417,7 +417,7 @@
           <el-input v-model="payTemp.amount" placeholder="请输入金额" />
         </el-form-item>
       </el-form>
-      <el-form ref="dataForm" :rules="rules" :model="operationTemp" v-if="dialogStatus==='createOperation'||dialogStatus==='updateOperation'" label-position="right" label-width="160px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rulesOperation" :model="operationTemp" v-if="dialogStatus==='createOperation'||dialogStatus==='updateOperation'" label-position="right" label-width="160px" style="width: 400px; margin-left:50px;">
         <el-form-item label="手术名称" prop="name">
           <el-input v-model="operationTemp.name" placeholder="请输入手术名称"/>
         </el-form-item>
@@ -440,9 +440,9 @@
         <el-form-item label="科室" prop="department">
           <el-input v-model="hospitalizationTemp.department" placeholder="请输入科室"/>
         </el-form-item>
-        <el-form-item label="责任护士" prop="nurse">
-          <el-input v-model="hospitalizationTemp.nurse" placeholder="请输入责任护士" />
-        </el-form-item>
+        <!--<el-form-item label="责任护士" prop="nurse">-->
+          <!--<el-input v-model="hospitalizationTemp.nurse" placeholder="请输入责任护士" />-->
+        <!--</el-form-item>-->
         <el-form-item label="主治医生" prop="doctor_name">
           <el-select v-model="hospitalizationTemp.doctor_name" class="filter-item" :placeholder="hospitalizationTemp.hospital_id==undefined ? '请先选择医院':'请选择医生'" :disabled="hospitalizationTemp.hospital_id==undefined ? true:false" @change="getDoctor('hospitalization',$event)">
             <el-option v-for="item in doctorOption" :key="item.id" :label="item.name" :value="item.id" />
@@ -477,7 +477,7 @@
           <el-input v-model="consultsTemp.platform" placeholder="请输入平台"/>
         </el-form-item>
       </el-form>
-      <el-form ref="dataForm" :rules="rules" :model="returnTemp" v-if="dialogStatus==='createReturn'||dialogStatus==='updateReturn'" label-position="right" label-width="160px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rulesReturn" :model="returnTemp" v-if="dialogStatus==='createReturn'||dialogStatus==='updateReturn'" label-position="right" label-width="160px" style="width: 400px; margin-left:50px;">
         <el-form-item label="回访日期" prop="at_date">
           <el-date-picker v-model="returnTemp.at_date" type="date" placeholder="请选择回访日期" value-format="yyyy-MM-dd" />
         </el-form-item>
@@ -1839,21 +1839,38 @@
           patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect }],
           consultant_name: [{ required: true, message: '请选择咨询师', trigger: 'change',validator: isSelect }],
           content: [{ required: true, message: '请输入咨询内容', trigger: 'change' }],
-          answer: [{ required: true, message: '请输入解答内容', trigger: 'blur' }],
-          at_date: [{ required: true, message: '请选择咨询日期', trigger: 'blur' }],
+          answer: [{ required: true, message: '请输入解答内容', trigger: 'change' }],
+          at_date: [{ required: true, message: '请选择咨询日期', trigger: 'change' }],
           project_name:[{ required: true, message: '请选择项目', trigger: 'change',validator: isSelect }],
-          type:[{ required: true, message: '请选缴费类型', trigger: 'change',validator: isSelect }],
+          type:[{ required: true, message: '请选择缴费类型', trigger: 'change',validator: isSelect }],
           pay_date:[{ required: true, message: '请选择缴费日期', trigger: 'change',validator: isSelect }],
           amount:[{ required: true, message: '请填写缴费数目', trigger: 'change' }],
           name: [{ required: true, message: '请输入手术名称', trigger: 'change' }],
           result: [{ required: true, message: '请输入手术结果', trigger: 'change' }],
-          region:[{ required: true, message: '请填写缴病区', trigger: 'change' }],
-          department:[{ required: true, message: '请填写科室', trigger: 'change' }],
-          leave_type:[{ required: true, message: '请出院方式', trigger: 'change' }],
-          nurse:[{ required: true, message: '请填写责任护士', trigger: 'change' }],
+          region:[{ required: true, message: '请输入病区', trigger: 'change' }],
+          department:[{ required: true, message: '请输入科室', trigger: 'change' }],
+          leave_type:[{ required: true, message: '请输入出院方式', trigger: 'change' }],
+          // nurse:[{ required: true, message: '请填写责任护士', trigger: 'change' }],
           in_date:[{ required: true, message: '请选择入院日期', trigger: 'change' }],
           leave_date:[{ required: true, message: '请选择出院日期', trigger: 'change' }],
           visitor_name: [{ required: true, message: '请选择回访人员', trigger: 'change',validator: isSelect }],
+        },
+        rulesOut: {
+          hospital_name:[{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect  }],
+          doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect  }],
+          source:[{ required: true, message: '请选择门诊来源', trigger: 'change',validator: isSelect  }],
+          type:[{ required: true, message: '请选择挂号类型', trigger: 'change',validator: isSelect }],
+          result: [{ required: true, message: '请输入诊断结果', trigger: 'change' }],
+        },
+        rulesOperation:{
+          name: [{ required: true, message: '请输入手术名称', trigger: 'change' }],
+          at_date: [{ required: true, message: '请选择手术日期', trigger: 'change' }],
+          result: [{ required: true, message: '请输入手术结果', trigger: 'change' }],
+        },
+        rulesReturn:{
+          at_date: [{ required: true, message: '请选择回访日期', trigger: 'change' }],
+          visitor_name: [{ required: true, message: '请选择回访人员', trigger: 'change',validator: isSelect }],
+          content: [{ required: true, message: '请输入回访内容', trigger: 'change' }],
         },
         areaOptions:['北京市','天津市','上海市','重庆市','河北省','山西省','辽宁省','吉林省','黑龙江省','江苏省','浙江省','安徽省','福建省','江西省','山东省','河南省','湖北省',
           '湖南省','广东省','海南省','四川省','贵州省','云南省','陕西省','甘肃省','青海省','台湾省','内蒙古自治区','广西壮族自治区','西藏自治区','宁夏回族自治区','新疆维吾尔族自治区','香港特别行政区','澳门特别行政区'],
@@ -1866,7 +1883,8 @@
           doctor_name:'',
           hospital_name:'',
           pay_date: '',
-          amount:''
+          amount:'',
+          type:'',
         },
         projectsOption:[],
         operationTemp:{
@@ -2045,13 +2063,14 @@
       resetPayTemp(){
         this.payTemp={
           hospital_id:undefined,
-            doctor_id:undefined,
-            project_id: undefined,
-            project_name:'',
-            doctor_name:'',
-            hospital_name:'',
-            pay_date: '',
-            amount:''
+          doctor_id:undefined,
+          project_id: undefined,
+          project_name:'',
+          doctor_name:'',
+          hospital_name:'',
+          pay_date: '',
+          amount:'',
+          type:''
         }
       },
       resetOperationTemp(){
@@ -2165,16 +2184,16 @@
           this.dialogStatus = 'createOut'
         }else if(name == 'pay'){
           this.resetPayTemp();
-          if(getHospital()!='null'){
-            this.payTemp.hospital_id =  getHospital();
-            this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
-            doctorList(this.payTemp.hospital_id ).then(response => {
-              this.doctorOption = response.data
-            });
-          }else{
-            this.payTemp.hospital_id =  undefined;
-            this.payTemp.hospital_name = '';
-          }
+          // if(getHospital()!='null'){
+          //   this.payTemp.hospital_id =  getHospital();
+          //   this.payTemp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
+          //   doctorList(this.payTemp.hospital_id ).then(response => {
+          //     this.doctorOption = response.data
+          //   });
+          // }else{
+          //   this.payTemp.hospital_id =  undefined;
+          //   this.payTemp.hospital_name = '';
+          // }
           var id = this.$route.params && this.$route.params.id;
           paymentsAdd(id).then(response => {
             if(response.data.hospital_id != 'null'){
@@ -2186,7 +2205,7 @@
                 this.payTemp.doctor_name = this.doctorOption.find(v => v.id == response.data.doctor_id).name;
               });
             }
-            if(response.data.at_date != 'null'){
+            if(response.data.at_date != null){
               this.payTemp.pay_date = response.data.at_date;
             }
           });
@@ -2245,11 +2264,12 @@
               })
             }else if(name == 'pay'){
               //增加缴费记录
-              this.$set(this.payTemp,'patient_id',id);
-              this.$delete(this.temp,'project_name');
-              this.$delete(this.temp,'doctor_name');
-              this.$delete(this.temp,'hospital_name');
-              payAdd(this.payTemp).then((res) => {
+              let payTemp = Object.assign({},this.payTemp);
+              this.$set(payTemp,'patient_id',id);
+              this.$delete(payTemp,'project_name');
+              this.$delete(payTemp,'doctor_name');
+              this.$delete(payTemp,'hospital_name');
+              payAdd(payTemp).then((res) => {
                 this.payList.unshift(res.data);
                 this.dialogFormVisible = false;
                 this.$message({
@@ -2270,10 +2290,11 @@
               })
             }else if(name == 'hospitalization'){
               //增加住院记录
-              this.$set(this.hospitalizationTemp,'patient_id',id);
-              this.$delete(this.temp,'hospital_name');
-              this.$delete(this.temp,'doctor_name');
-              hospitalizationAdd(this.hospitalizationTemp).then((res) => {
+              let hospitalizationTemp = Object.assign({},this.hospitalizationTemp);
+              this.$set(hospitalizationTemp,'patient_id',id);
+              this.$delete(hospitalizationTemp,'hospital_name');
+              this.$delete(hospitalizationTemp,'doctor_name');
+              hospitalizationAdd(hospitalizationTemp).then((res) => {
                 this.hospitalizationList.unshift(res.data);
                 this.dialogFormVisible = false;
                 this.$message({
@@ -2283,9 +2304,10 @@
               })
             }else if(name == 'consults'){
               //增加咨询记录
-              this.$set(this.consultsTemp,'patient_id',id);
-              this.$delete(this.consultsTemp,'consultant_name');
-              consultsAdd(this.consultsTemp).then((res) => {
+              let consultsTemp = Object.assign({},this.consultsTemp);
+              this.$set(consultsTemp,'patient_id',id);
+              this.$delete(consultsTemp,'consultant_name');
+              consultsAdd(consultsTemp).then((res) => {
                 this.consultsList.unshift(res.data);
                 this.dialogFormVisible = false;
                 this.$message({
@@ -2295,9 +2317,10 @@
               })
             }else if(name == 'return'){
               //增加咨询记录
-              this.$set(this.returnTemp,'patient_id',id);
-              this.$delete(this.returnTemp,'visitor_name');
-              feedbackAdd(this.returnTemp).then((res) => {
+              let returnTemp = Object.assign({},this.returnTemp);
+              this.$set(returnTemp,'patient_id',id);
+              this.$delete(returnTemp,'visitor_name');
+              feedbackAdd(returnTemp).then((res) => {
                 this.returnList.unshift(res.data);
                 this.dialogFormVisible = false;
                 this.$message({

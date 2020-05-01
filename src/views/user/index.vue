@@ -86,8 +86,8 @@
           create: '新增咨询师'
         },
         rules: {
-          name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-          phone: [{ required: true, message: '联系电话不能为空', trigger: 'blur' },{validator:validatePhoneTwo}]
+          name: [{ required: true, message: '姓名不能为空', trigger: 'change' }],
+          phone: [{ required: true, message: '联系电话不能为空', trigger: 'change' },{validator:validatePhoneTwo}]
         },
         downloadLoading: false
       }

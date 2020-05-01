@@ -211,12 +211,12 @@
         dialogFormVisible: false,
         dialogStatus: '',
         rules: {
-          patient_name: [{ required: true, message: '病人姓名不能为空', trigger: 'change',validator: isSelect }],
+          patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect }],
           hospital_name: [{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect}],
           doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect }],
-          region:[{ required: true, message: '请填写缴病区', trigger: 'change' }],
-          department:[{ required: true, message: '请填写科室', trigger: 'change' }],
-          leave_type:[{ required: true, message: '请出院方式', trigger: 'change' }],
+          region:[{ required: true, message: '请输入病区', trigger: 'change' }],
+          department:[{ required: true, message: '请输入科室', trigger: 'change' }],
+          leave_type:[{ required: true, message: '请输入出院方式', trigger: 'change' }],
           // nurse:[{ required: true, message: '请填写责任护士', trigger: 'change' }],
           in_date:[{ required: true, message: '请选择入院日期', trigger: 'change' }],
           leave_date:[{ required: true, message: '请选择出院日期', trigger: 'change' }]

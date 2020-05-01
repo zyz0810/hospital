@@ -166,8 +166,8 @@
           patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change',validator: isSelect }],
           consultant_name: [{ required: true, message: '请选择咨询师', trigger: 'change',validator: isSelect }],
           content: [{ required: true, message: '请输入咨询内容', trigger: 'change' }],
-          answer: [{ required: true, message: '请输入解答内容', trigger: 'blur' }],
-          at_date: [{ required: true, message: '请选择咨询日期', trigger: 'blur' }]
+          answer: [{ required: true, message: '请输入解答内容', trigger: 'change' }],
+          at_date: [{ required: true, message: '请选择咨询日期', trigger: 'change' }]
         },
         downloadLoading: false,
         loading:false

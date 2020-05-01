@@ -100,7 +100,6 @@
     },
     methods: {
       async fetchData() {
-        console.log('bhjhh')
         this.listLoading = true
         const { data } = await fetchList()
         this.list = data.items

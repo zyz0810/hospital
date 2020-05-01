@@ -256,7 +256,7 @@
         dialogFormVisible: false,
         dialogStatus: '',
         rules: {
-          patient_name: [{ required: true, message: '请填写病人姓名', trigger: 'change' ,validator: isSelect }],
+          patient_name: [{ required: true, message: '请输入病人姓名', trigger: 'change' ,validator: isSelect }],
           hospital_name:[{ required: true, message: '请选择医院', trigger: 'change',validator: isSelect  }],
           doctor_name:[{ required: true, message: '请选择医生', trigger: 'change',validator: isSelect  }],
           disease:[{ required: true, message: '请选择门诊病种', trigger: 'change',validator: isSelect  }],
@@ -442,8 +442,6 @@
       },
       handleCreate() {
         this.resetTemp();
-        console.log(getHospital().length)
-        console.log(getHospital())
         if(getHospital()!='null'){
           this.temp.hospital_id =  getHospital();
           this.temp.hospital_name = this.hospitalOption.find(v => v.id == getHospital()).name;
@@ -474,7 +472,6 @@
             this.$delete(param,'source');
             // this.$delete(param,'disease_first_level_name');
             // this.$delete(param,'disease_second_level_name');
-            console.log(param)
             outpatientAdd(this.temp).then((res) => {
               this.list.unshift(res.data);
               this.dialogFormVisible = false;
@@ -490,7 +487,6 @@
       handleUpdate(row) {
         this.patientOption=[];
         this.temp = Object.assign({}, row); // copy obj
-        // console.log(row)
         doctorList(row.hospital_id).then(response => {
           this.doctorOption = response.data
         });

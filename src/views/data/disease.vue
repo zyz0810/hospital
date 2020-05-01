@@ -250,7 +250,6 @@
         }else if(name=='two'){
           this.dialogLevelVisible = true;
           this.updateLevelTemp = Object.assign({}, row); // copy obj
-          console.log(this.updateLevelTemp)
           this.$nextTick(() => {
             this.$refs['levelForm'].clearValidate()
           })
@@ -284,7 +283,6 @@
               this.$delete(tempData,'second_level_name');
               // tempData.name =  tempData.second_level_name;
               this.$set(tempData,'name',this.updateLevelTemp.second_level_name);
-              console.log(tempData)
               levelDiseaseUpdate(tempData.second_level_id,tempData).then((res) => {
                 const index = this.levelList.findIndex(v => v.second_level_id === this.updateLevelTemp.second_level_id);
                 this.levelList.splice(index, 1, res.data);
