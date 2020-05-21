@@ -2204,6 +2204,10 @@
                 this.doctorOption = res.data
                 this.payTemp.doctor_name = this.doctorOption.find(v => v.id == response.data.doctor_id).name;
               });
+              projectsNameList(response.data.hospital_id).then(response => {
+                this.projectsOption = response.data
+              });
+
             }
             if(response.data.at_date != null){
               this.payTemp.pay_date = response.data.at_date;
